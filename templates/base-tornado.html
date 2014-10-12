@@ -14,16 +14,14 @@
     <link href="{{ static_url('bootstrap.css') }}" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="{{ static_url('navbar.css') }}" rel="stylesheet">
-
-      <!-- Custom styles for this template -->
     <link href="{{ static_url('sticky-footer-navbar.css') }}" rel="stylesheet">
+
+    <!--<link href="{{ static_url('carousel.css') }}" rel="stylesheet">-->
   </head>
 
   <body>
-
-    <div class="container">
-
+    <div>
+     <div class="container">
       <!-- Static navbar -->
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container-fluid">
@@ -64,8 +62,9 @@
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
       </div>
+     </div>
+     </div>
     {% block content %}{% end %}
-    </div>
 
 {#     <div class="footer">#}
 {#      <div class="container">#}

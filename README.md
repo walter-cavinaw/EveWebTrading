@@ -1,4 +1,4 @@
 EveWebTrading
 =============
 
-A trading engine designed to match orders to buy or sell items.
+A trading engine designed to match orders to buy or sell shares.
