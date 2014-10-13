@@ -20,8 +20,6 @@
   </head>
 
   <body>
-    <div>
-     <div class="container">
       <!-- Static navbar -->
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container-fluid">
@@ -49,9 +47,9 @@
                   <li class="dropdown-header">Nav header</li>
                   <li><a href="#">Separated link</a></li>
                   <li><a href="#">One more separated link</a></li>
-              {% end %}
                 </ul>
               </li>
+              {% end %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
               {% block rightnav %}
@@ -62,8 +60,6 @@
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
       </div>
-     </div>
-     </div>
     {% block content %}{% end %}
 
 {#     <div class="footer">#}
