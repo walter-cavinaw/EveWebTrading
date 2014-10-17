@@ -32,16 +32,22 @@ $(document).ready(function() {
 
 function newMessage(form) {
     var message = form.formToDict();
-    updater.socket.send(JSON.stringify(message));
+    if (message != null) {
+        updater.socket.send(JSON.stringify(message));
+    }
 }
+
 
 jQuery.fn.formToDict = function() {
     var fields = this.serializeArray();
     var json = {}
+    var isEmpty = false;
     for (var i = 0; i < fields.length; i++) {
+        if (fields[i].value == '') isEmpty = true;
         json[fields[i].name] = fields[i].value;
     }
     if (json.next) delete json.next;
+    if (isEmpty) return null;
     return json;
 };
 
