@@ -31,10 +31,14 @@
       </div>
       <div class="row" id="input">
         <form id="messageform" class="form-inline" role="form">
-           <select class="form-control">
+           <select name="trade" class="form-control">
             <option>Buy</option>
             <option>Sell</option>
             <option>Sell Short</option>
+           </select>
+            <select onchange="checkOrder(this);" name="type" class="form-control">
+            <option>Limit</option>
+            <option>Market</option>
            </select>
            <div class="form-group">
                <div class="input-group">

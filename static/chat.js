@@ -71,3 +71,14 @@ var updater = {
         node.slideDown();
     }
 };
+
+function checkOrder(select){
+    var limit = $('#limit');
+    if (select.value == 'Market'){
+        limit.prop('disabled', true);
+        limit.attr('placeholder', 'Limit Not Available');
+    } else {
+        limit.prop('disabled', false);
+        limit.attr('placeholder', "Enter Limit");
+    }
+}
