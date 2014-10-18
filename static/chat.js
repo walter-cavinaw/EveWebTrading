@@ -13,7 +13,6 @@
 // under the License.
 
 $(document).ready(function() {
-		console.log("Document ready");
     $("#messageform").on("submit", function() {
         newMessage($(this));
         return false;
@@ -27,7 +26,8 @@ $(document).ready(function() {
     $("#message").select();
     updater.start();
     chartUpdater.start();
-    // TEMPORARY
+    // TEMPORARY, wait 2 seconds for socket to establish itself before sending request
+    // Make this a callback for when the socket is established
     window.setTimeout(function(){
     	chartUpdater.socket.send(JSON.stringify({ticker: "AAPL"}))
     }, 2000);
@@ -83,20 +83,13 @@ var chartUpdater = {
     start: function() {
         var url = "ws://" + location.host + "/chartsocket";
         chartUpdater.socket = new WebSocket(url);
-        chartUpdater.socket.onmessage = function(event) {
-            chartUpdater.showMessage(JSON.parse(event.data));
+        chartUpdater.socket.onmessage = function(data) {
+            chartUpdater.showMessage(data);
         };
     },
 
     showMessage: function(message) {
     		console.log(message);
-        if (message.type == 'notification'){
-		        var node = $(message.html);
-		        node.hide();
-		        $("#footer").empty();
-		        $("#footer").append(node);
-		        node.slideDown();
-      	}
     }
 };
 
