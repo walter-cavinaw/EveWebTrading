@@ -34,13 +34,17 @@ from tornado.options import define, options
 define("port", default=8888, help="run on the given port", type=int)
 django.setup()
 
+# Global configurations and routing goes here
 class Application(tornado.web.Application):
     def __init__(self):
         wsgi_app = tornado.wsgi.WSGIContainer(
         django.core.handlers.wsgi.WSGIHandler())
         handlers = [
+            # Homepage is routed here
             (r"/", MainHandler),
+            # Requests to get/post order data are routed here
             (r"/chatsocket", ChatSocketHandler),
+            (r"/chartsocket", ChartSocketHandler),
             (r'.*', tornado.web.FallbackHandler, dict(fallback=wsgi_app)),
         ]
         settings = dict(
@@ -53,13 +57,62 @@ class Application(tornado.web.Application):
         )
         tornado.web.Application.__init__(self, handlers, **settings)
 
-class TestHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.render("base-tornado.html")
-
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render("index.html", messages=ChatSocketHandler.cache)
+        print("Index rendered")
+        self.render("index.html", messages = ChatSocketHandler.cache)
+
+class ChartSocketHandler(tornado.websocket.WebSocketHandler):
+    waiters = set()
+    cache = []
+    data = []
+    cache_size = 200
+
+    def open(self):
+        print("Chart websocket opened")
+        ChartSocketHandler.waiters.add(self)
+
+    def on_close(self):
+        ChartSocketHandler.waiters.remove(self)
+
+    @classmethod
+    def update_cache(cls, chat):
+        cls.cache.append(chat)
+        if len(cls.cache) > cls.cache_size:
+            cls.cache = cls.cache[-cls.cache_size:]
+
+    @classmethod
+    def send_updates(cls, chat):
+        logging.info("sending message to %d waiters", len(cls.waiters))
+        for waiter in cls.waiters:
+            try:
+                waiter.write_message(chat)
+            except:
+                logging.error("Error sending message", exc_info=True)
+
+    @classmethod
+    def send_error(cls, chat):
+        logging.info("sending error notification")
+
+    def on_message(self, message):
+        logging.info("Message from client: " + message)
+        parsed = tornado.escape.json_decode(message)
+        ticker = parsed["ticker"]
+        logging.info("Client is requesting live data for ticker " + ticker);
+
+        def sendChartData():
+            print("Sending chart data")
+
+        chart_loop = tornado.ioloop.IOLoop.instance()
+        schedule = tornado.ioloop.PeriodicCallback(sendChartData, 1000, io_loop = chart_loop)
+        schedule.start()
+        chart_loop.start()
+
+    @classmethod
+    def update_data(cls, datap):
+        cls.data.append(datap)
+        cls.send_updates(cls.data)
+        print(cls.data)
 
 class ChatSocketHandler(tornado.websocket.WebSocketHandler):
     waiters = set()
@@ -72,6 +125,7 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
         return {}
 
     def open(self):
+        print("Chat websocket opened")
         ChatSocketHandler.waiters.add(self)
 
     def on_close(self):
@@ -108,8 +162,12 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
                 "price": int(parsed["price"]),
                 "id": str(uuid.uuid4()),
                 }
-            chat['html'] = tornado.escape.to_basestring(
-               self.render_string("message.html", message=chat))
+            print("trade: " + parsed["trade"])
+            print("type: " + parsed["type"])
+            print("ticker: " + parsed["ticker"])
+            print("shares: " + parsed["shares"])
+            print("price: " + parsed["price"])
+            print("id: " + parsed["id"])
             # Check the order parameters some more: is the ticker valid
             #                Are the prices and share amounts reasonable
             # Then send the order through to get processed
@@ -136,9 +194,9 @@ def main():
     django.core.handlers.wsgi.WSGIHandler())
     tornado_app = tornado.web.Application(
     [
-    (r"/test", TestHandler),
     (r"/chat", MainHandler),
     (r"/chatsocket", ChatSocketHandler),
+    (r"/chartsocket", ChartSocketHandler),
     (r'.*', tornado.web.FallbackHandler, dict(fallback=wsgi_app))
     ],
         cookie_secret="__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__",

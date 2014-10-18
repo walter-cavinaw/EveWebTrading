@@ -13,9 +13,7 @@
 // under the License.
 
 $(document).ready(function() {
-    if (!window.console) window.console = {};
-    if (!window.console.log) window.console.log = function() {};
-
+		console.log("Document ready");
     $("#messageform").on("submit", function() {
         newMessage($(this));
         return false;
@@ -28,15 +26,20 @@ $(document).ready(function() {
     });
     $("#message").select();
     updater.start();
+    chartUpdater.start();
+    // TEMPORARY
+    window.setTimeout(function(){
+    	chartUpdater.socket.send(JSON.stringify({ticker: "AAPL"}))
+    }, 2000);
 });
 
 function newMessage(form) {
     var message = form.formToDict();
     if (message != null) {
+    		console.log(message);
         updater.socket.send(JSON.stringify(message));
     }
 }
-
 
 jQuery.fn.formToDict = function() {
     var fields = this.serializeArray();
@@ -59,16 +62,41 @@ var updater = {
         updater.socket = new WebSocket(url);
         updater.socket.onmessage = function(event) {
             updater.showMessage(JSON.parse(event.data));
-        }
+        };
     },
 
     showMessage: function(message) {
+    		console.log(message);
         if (message.type == 'notification'){
-        var node = $(message.html);
-        node.hide();
-        $("#footer").empty();
-        $("#footer").append(node);
-        node.slideDown();}
+		        var node = $(message.html);
+		        node.hide();
+		        $("#footer").empty();
+		        $("#footer").append(node);
+		        node.slideDown();
+      	}
+    }
+};
+
+var chartUpdater = {
+    socket: null,
+
+    start: function() {
+        var url = "ws://" + location.host + "/chartsocket";
+        chartUpdater.socket = new WebSocket(url);
+        chartUpdater.socket.onmessage = function(event) {
+            chartUpdater.showMessage(JSON.parse(event.data));
+        };
+    },
+
+    showMessage: function(message) {
+    		console.log(message);
+        if (message.type == 'notification'){
+		        var node = $(message.html);
+		        node.hide();
+		        $("#footer").empty();
+		        $("#footer").append(node);
+		        node.slideDown();
+      	}
     }
 };
 
