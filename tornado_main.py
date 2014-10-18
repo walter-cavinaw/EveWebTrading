@@ -17,6 +17,7 @@
 
 Authentication, error handling, etc are left as an exercise for the reader :)
 """
+import django
 import django.core.handlers.wsgi
 import tornado.wsgi
 import logging
@@ -31,7 +32,7 @@ import uuid
 from tornado.options import define, options
 
 define("port", default=8888, help="run on the given port", type=int)
-
+django.setup()
 
 class Application(tornado.web.Application):
     def __init__(self):
@@ -87,7 +88,7 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
         logging.info("sending message to %d waiters", len(cls.waiters))
         for waiter in cls.waiters:
             try:
-                print chat
+                print(chat)
                 waiter.write_message(chat)
             except:
                 logging.error("Error sending message", exc_info=True)
@@ -102,7 +103,7 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
         chat["html"] = tornado.escape.to_basestring(
             self.render_string("message.html", message=chat))
 
-        #self.update_data(int(parsed["price"]))
+        #self.serpdate_data(int(parsed["price"]))
 
         ChatSocketHandler.update_cache(chat)
         ChatSocketHandler.send_updates(chat)
@@ -111,7 +112,7 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
     def update_data(cls, datap):
         cls.data.append(datap)
         cls.send_updates(cls.data)
-        print cls.data
+        print(cls.data)
 
 def main():
     tornado.options.parse_command_line()
