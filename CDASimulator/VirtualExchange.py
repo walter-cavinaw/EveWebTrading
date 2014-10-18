@@ -3,19 +3,17 @@
 import Queue
 import threading
 
-from CDASimulator.EngineObjects import MatchingEngine
-from CDASimulator.ExchangeObjects import Company
+from CDASimulator.EngineObjects.MatchingEngine import MatchingEngine
 
 
 class VirtualExchange(object):
 
-    def __init__(self):
+    def __init__(self, companies):
         super(VirtualExchange, self).__init__()
         self.engine_list = []
-        self.fake_company = Company("Fake Company", "FAKE", 3000000000)
-
-        self.fake_engine = MatchingEngine(self.fake_company.get_stock())
-        self.engine_list.append((self.fake_engine, threading.Semaphore()))
+        for company in companies:
+            new_engine = MatchingEngine(company.get_stock())
+            self.engine_list.append((new_engine, threading.Semaphore()))
 
         self.order_queue = Queue.Queue()
 
