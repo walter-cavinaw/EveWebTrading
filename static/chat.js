@@ -63,12 +63,12 @@ var updater = {
     },
 
     showMessage: function(message) {
-        var existing = $("#m" + message.id);
-        if (existing.length > 0) return;
+        if (message.type == 'notification'){
         var node = $(message.html);
         node.hide();
-        $("#inbox").append(node);
-        node.slideDown();
+        $("#footer").empty();
+        $("#footer").append(node);
+        node.slideDown();}
     }
 };
 
