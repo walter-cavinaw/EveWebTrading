@@ -24,7 +24,7 @@ $(document).ready(function() {
         }
     });
     $("#message").select();
-    updater.start();
+    userUpdater.start();
     chartUpdater.start();
     // TEMPORARY, wait 2 seconds for socket to establish itself before sending request
     // Make this a callback for when the socket is established
@@ -37,7 +37,7 @@ function newMessage(form) {
     var message = form.formToDict();
     if (message != null) {
     		console.log(message);
-        updater.socket.send(JSON.stringify(message));
+        userUpdater.socket.send(JSON.stringify(message));
     }
 }
 
@@ -54,14 +54,14 @@ jQuery.fn.formToDict = function() {
     return json;
 };
 
-var updater = {
+var userUpdater = {
     socket: null,
 
     start: function() {
-        var url = "ws://" + location.host + "/chatsocket";
-        updater.socket = new WebSocket(url);
-        updater.socket.onmessage = function(event) {
-            updater.showMessage(JSON.parse(event.data));
+        var url = "ws://" + location.host + "/usersocket";
+        userUpdater.socket = new WebSocket(url);
+        userUpdater.socket.onmessage = function(event) {
+            userUpdater.showMessage(JSON.parse(event.data));
         };
     },
 

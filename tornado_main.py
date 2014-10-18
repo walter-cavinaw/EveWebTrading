@@ -13,10 +13,7 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-"""Simplified chat demo for websockets.
 
-Authentication, error handling, etc are left as an exercise for the reader :)
-"""
 import django
 import django.core.handlers.wsgi
 import tornado.wsgi
@@ -43,7 +40,7 @@ class Application(tornado.web.Application):
             # Homepage is routed here
             (r"/", MainHandler),
             # Requests to get/post order data are routed here
-            (r"/chatsocket", ChatSocketHandler),
+            (r"/usersocket", UserSocketHandler),
             (r"/chartsocket", ChartSocketHandler),
             (r'.*', tornado.web.FallbackHandler, dict(fallback=wsgi_app)),
         ]
@@ -57,10 +54,11 @@ class Application(tornado.web.Application):
         )
         tornado.web.Application.__init__(self, handlers, **settings)
 
+
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        print("Index rendered")
-        self.render("index.html", messages = ChatSocketHandler.cache)
+        self.render("index.html", messages=UserSocketHandler.cache)
+
 
 class ChartSocketHandler(tornado.websocket.WebSocketHandler):
     waiters = set()
@@ -79,23 +77,20 @@ class ChartSocketHandler(tornado.websocket.WebSocketHandler):
         ChartSocketHandler.waiters.remove(self)
 
     @classmethod
-    def update_cache(cls, chat):
-        cls.cache.append(chat)
+    def update_cache(cls, message):
+        cls.cache.append(message)
         if len(cls.cache) > cls.cache_size:
             cls.cache = cls.cache[-cls.cache_size:]
 
     @classmethod
-    def send_updates(cls, chat):
+    def send_updates(cls, message):
         logging.info("sending message to %d waiters", len(cls.waiters))
         for waiter in cls.waiters:
             try:
-                waiter.write_message(chat)
+                waiter.write_message(message)
             except:
                 logging.error("Error sending message", exc_info=True)
 
-    @classmethod
-    def send_error(cls, chat):
-        logging.info("sending error notification")
 
     def on_message(self, message):
         logging.info("Message from client: " + message)
@@ -128,7 +123,7 @@ class ChartSocketHandler(tornado.websocket.WebSocketHandler):
         cls.send_updates(cls.data)
         print(cls.data)
 
-class ChatSocketHandler(tornado.websocket.WebSocketHandler):
+class UserSocketHandler(tornado.websocket.WebSocketHandler):
     waiters = set()
     cache = []
     data = []
@@ -139,36 +134,33 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
         return {}
 
     def open(self):
-        print("Chat websocket opened")
-        ChatSocketHandler.waiters.add(self)
+        logging.info("user websocket opened")
+        UserSocketHandler.waiters.add(self)
 
     def on_close(self):
-        ChatSocketHandler.waiters.remove(self)
+        UserSocketHandler.waiters.remove(self)
 
     @classmethod
-    def update_cache(cls, chat):
-        cls.cache.append(chat)
+    def update_cache(cls, message):
+        cls.cache.append(message)
         if len(cls.cache) > cls.cache_size:
             cls.cache = cls.cache[-cls.cache_size:]
 
     @classmethod
-    def send_updates(cls, chat):
+    def send_updates(cls, message):
         logging.info("sending message to %d waiters", len(cls.waiters))
         for waiter in cls.waiters:
             try:
-                waiter.write_message(chat)
+                waiter.write_message(message)
             except:
                 logging.error("Error sending message", exc_info=True)
 
-    @classmethod
-    def send_error(cls, chat):
-        logging.info("sending error notification")
 
     def on_message(self, message):
         logging.info("got message %r", message)
         parsed = tornado.escape.json_decode(message)
         try:
-            chat = {
+            order = {
                 "trade": parsed["trade"],
                 "type": parsed["type"],
                 "ticker": parsed["ticker"],
@@ -176,21 +168,21 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
                 "price": int(parsed["price"]),
                 "id": str(uuid.uuid4()),
                 }
-            chat['html'] = tornado.escape.to_basestring(
-               self.render_string("message.html", message=chat))
+            order['html'] = tornado.escape.to_basestring(
+               self.render_string("message.html", message=order))
             # Check the order parameters some more: is the ticker valid
             #                Are the prices and share amounts reasonable
             # Then send the order through to get processed
 
-            # ChatSocketHandler.update_cache(chat)
-            # ChatSocketHandler.send_updates(chat)
+            # UserSocketHandler.update_cache(chat)
+            # UserSocketHandler.send_updates(chat)
         except:
             logging.error("Error when parsing Order data", exc_info=False)
             error_notify = {"type": "notification"}
             error_notify["html"] = tornado.escape.to_basestring(
                 self.render_string("error.html", message="Order was not inputted correctly.")
             )
-            ChatSocketHandler.send_updates(error_notify)
+            UserSocketHandler.send_updates(error_notify)
 
     @classmethod
     def update_data(cls, datap):
@@ -204,8 +196,8 @@ def main():
     django.core.handlers.wsgi.WSGIHandler())
     tornado_app = tornado.web.Application(
     [
-    (r"/chat", MainHandler),
-    (r"/chatsocket", ChatSocketHandler),
+    (r"/trade", MainHandler),
+    (r"/usersocket", UserSocketHandler),
     (r"/chartsocket", ChartSocketHandler),
     (r'.*', tornado.web.FallbackHandler, dict(fallback=wsgi_app))
     ],
