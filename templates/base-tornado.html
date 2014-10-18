@@ -62,11 +62,15 @@
       </div>
     {% block content %}{% end %}
 
-{#     <div class="footer">#}
-{#      <div class="container">#}
-{#        {% block footer %}<p>Thank you for using our service</p>{% end %}#}
-{#      </div>#}
-{#    </div>#}
+     <div class="container">
+      <nav class="navbar navbar-default navbar-fixed-bottom">
+        <div class="navbar-inner navbar-content-center">
+            <div id="footer" class="footer">
+            {% block footer %}{% end %}
+            </div>
+        </div>
+      </nav>
+    </div>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

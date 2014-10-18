@@ -88,25 +88,41 @@ class ChatSocketHandler(tornado.websocket.WebSocketHandler):
         logging.info("sending message to %d waiters", len(cls.waiters))
         for waiter in cls.waiters:
             try:
-                print(chat)
                 waiter.write_message(chat)
             except:
                 logging.error("Error sending message", exc_info=True)
 
+    @classmethod
+    def send_error(cls, chat):
+        logging.info("sending error notification")
+
     def on_message(self, message):
         logging.info("got message %r", message)
         parsed = tornado.escape.json_decode(message)
-        chat = {
-            "id": str(uuid.uuid4()),
-            "body": parsed["price"],
-            }
-        chat["html"] = tornado.escape.to_basestring(
-            self.render_string("message.html", message=chat))
+        try:
+            chat = {
+                "trade": parsed["trade"],
+                "type": parsed["type"],
+                "ticker": parsed["ticker"],
+                "shares": int(parsed["shares"]),
+                "price": int(parsed["price"]),
+                "id": str(uuid.uuid4()),
+                }
+            chat['html'] = tornado.escape.to_basestring(
+               self.render_string("message.html", message=chat))
+            # Check the order parameters some more: is the ticker valid
+            #                Are the prices and share amounts reasonable
+            # Then send the order through to get processed
 
-        #self.serpdate_data(int(parsed["price"]))
-
-        ChatSocketHandler.update_cache(chat)
-        ChatSocketHandler.send_updates(chat)
+            # ChatSocketHandler.update_cache(chat)
+            # ChatSocketHandler.send_updates(chat)
+        except:
+            logging.error("Error when parsing Order data", exc_info=False)
+            error_notify = {"type": "notification"}
+            error_notify["html"] = tornado.escape.to_basestring(
+                self.render_string("error.html", message="Order was not inputted correctly.")
+            )
+            ChatSocketHandler.send_updates(error_notify)
 
     @classmethod
     def update_data(cls, datap):

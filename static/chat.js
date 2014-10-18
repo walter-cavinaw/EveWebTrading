@@ -63,11 +63,22 @@ var updater = {
     },
 
     showMessage: function(message) {
-        var existing = $("#m" + message.id);
-        if (existing.length > 0) return;
+        if (message.type == 'notification'){
         var node = $(message.html);
         node.hide();
-        $("#inbox").append(node);
-        node.slideDown();
+        $("#footer").empty();
+        $("#footer").append(node);
+        node.slideDown();}
     }
 };
+
+function checkOrder(select){
+    var limit = $('#limit');
+    if (select.value == 'Market'){
+        limit.prop('disabled', true);
+        limit.attr('placeholder', 'Limit Not Available');
+    } else {
+        limit.prop('disabled', false);
+        limit.attr('placeholder', "Enter Limit");
+    }
+}
