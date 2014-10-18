@@ -3,8 +3,8 @@
 import Queue
 import threading
 
+from CDASimulator.EngineObjects import MatchingEngine
 from CDASimulator.ExchangeObjects import Company
-from MatchingEngine import MatchingEngine
 
 
 class VirtualExchange(object):
