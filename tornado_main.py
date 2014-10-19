@@ -25,6 +25,9 @@ import tornado.web
 import tornado.websocket
 import os.path
 import uuid
+import threading
+from CDASimulator.VirtualExchange import VirtualExchange
+from CDASimulator.ExchangeObjects.Company import Company
 
 from tornado.options import define, options
 
@@ -129,12 +132,17 @@ class UserSocketHandler(tornado.websocket.WebSocketHandler):
     data = []
     cache_size = 200
 
+    @classmethod
+    def set_exchange(self, exchange):
+        self.exchange = exchange
+
     def get_compression_options(self):
         # Non-None enables compression with default options.
         return {}
 
     def open(self):
         logging.info("user websocket opened")
+        logging.info(self.exchange)
         UserSocketHandler.waiters.add(self)
 
     def on_close(self):
@@ -191,9 +199,14 @@ class UserSocketHandler(tornado.websocket.WebSocketHandler):
         print(cls.data)
 
 def main():
+    companies = [Company("fake company", 3000, "FAKE")]
+    eve = VirtualExchange(companies)
+    ex_thread = threading.Thread(target=eve.run_exchange)
+    ex_thread.start()
     tornado.options.parse_command_line()
     wsgi_app = tornado.wsgi.WSGIContainer(
     django.core.handlers.wsgi.WSGIHandler())
+    UserSocketHandler.set_exchange(eve)
     tornado_app = tornado.web.Application(
     [
     (r"/trade", MainHandler),
@@ -209,6 +222,7 @@ def main():
     app = tornado_app
     app.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
+    ex_thread.join()
 
 
 if __name__ == "__main__":

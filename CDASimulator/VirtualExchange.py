@@ -54,7 +54,7 @@ class VirtualExchange(object):
     def place_cancel(self, order):
         if self.assert_is_order(order):
             for engine_and_semaphore in self.engine_list:
-                if order.get_stock_ticker() == engine_and_semaphore[0].get_stck().get_ticker():
+                if order.get_stock_ticker() == engine_and_semaphore[0].get_stock().get_ticker():
                     engine_and_semaphore[1].acquire()
                     engine_and_semaphore[0].cancel_order(order)
                     engine_and_semaphore[1].release()
