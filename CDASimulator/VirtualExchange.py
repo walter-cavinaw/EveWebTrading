@@ -3,19 +3,17 @@
 import Queue
 import threading
 
-from CDASimulator.EngineObjects import MatchingEngine
-from CDASimulator.ExchangeObjects import Company
+from CDASimulator.EngineObjects.MatchingEngine import MatchingEngine
 
 
 class VirtualExchange(object):
 
-    def __init__(self):
+    def __init__(self, companies):
         super(VirtualExchange, self).__init__()
         self.engine_list = []
-        self.fake_company = Company("Fake Company", "FAKE", 3000000000)
-
-        self.fake_engine = MatchingEngine(self.fake_company.get_stock())
-        self.engine_list.append((self.fake_engine, threading.Semaphore()))
+        for company in companies:
+            new_engine = MatchingEngine(company.get_stock())
+            self.engine_list.append((new_engine, threading.Semaphore()))
 
         self.order_queue = Queue.Queue()
 
@@ -56,7 +54,7 @@ class VirtualExchange(object):
     def place_cancel(self, order):
         if self.assert_is_order(order):
             for engine_and_semaphore in self.engine_list:
-                if order.get_stock_ticker() == engine_and_semaphore[0].get_stck().get_ticker():
+                if order.get_stock_ticker() == engine_and_semaphore[0].get_stock().get_ticker():
                     engine_and_semaphore[1].acquire()
                     engine_and_semaphore[0].cancel_order(order)
                     engine_and_semaphore[1].release()
