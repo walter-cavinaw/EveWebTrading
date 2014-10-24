@@ -1,17 +1,3 @@
-// Copyright 2009 FriendFeed
-//
-// Licensed under the Apache License, Version 2.0 (the "License"); you may
-// not use this file except in compliance with the License. You may obtain
-// a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-// License for the specific language governing permissions and limitations
-// under the License.
-
 $(document).ready(function() {
     $("#messageform").on("submit", function() {
         newMessage($(this));
@@ -43,7 +29,7 @@ function newMessage(form) {
 
 jQuery.fn.formToDict = function() {
     var fields = this.serializeArray();
-    var json = {}
+    var json = {};
     var isEmpty = false;
     for (var i = 0; i < fields.length; i++) {
         if (fields[i].value == '') isEmpty = true;
@@ -83,13 +69,23 @@ var chartUpdater = {
     start: function() {
         var url = "ws://" + location.host + "/chartsocket";
         chartUpdater.socket = new WebSocket(url);
-        chartUpdater.socket.onmessage = function(data) {
-            chartUpdater.showMessage(data);
+        chartUpdater.socket.onmessage = function(event) {
+            chartUpdater.showMessage(JSON.parse(event.data));
         };
     },
 
     showMessage: function(message) {
-    		console.log(message);
+            var datum = {
+                date: parseDate(message.date),
+                open: message.open,
+                high: message.high,
+                low: message.low,
+                close: message.close,
+                volume: message.volume
+            };
+            console.log(JSON.stringify(datum));
+            data.push(datum);
+            redraw();
     }
 };
 
