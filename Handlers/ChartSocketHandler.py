@@ -11,7 +11,7 @@ class ChartSocketHandler(tornado.websocket.WebSocketHandler):
     cache_size = 200
 
     # temporary loop index
-    loopIndex = 0;
+    loopIndex = 164;
 
     def open(self):
         print("Chart websocket opened")
@@ -44,25 +44,27 @@ class ChartSocketHandler(tornado.websocket.WebSocketHandler):
 
         # read data.csv
         f = open("static/data.csv")
-        lines = f.readlines()
+        lines = [line.rstrip() for line in f]
         lineCount = len(lines)
 
         # temporary method to send a line of data every 2 seconds
         def sendChartData():
-            indexToRead = ChartSocketHandler.loopIndex%lineCount
+            indexToRead = ChartSocketHandler.loopIndex % lineCount
             if indexToRead == 0:
                 indexToRead = 1
-            print(lines[indexToRead])
-            ChartSocketHandler.send_updates(lines[indexToRead])
+            message_arr = lines[indexToRead].split(",")
+            message = {"date": message_arr[0],
+                       "open": message_arr[1],
+                       "high": message_arr[2],
+                       "low": message_arr[3],
+                       "close": message_arr[4],
+                       "volume": message_arr[5]
+                      }
+            logging.info(message)
+            ChartSocketHandler.send_updates(message)
             # iterate the loop index
             ChartSocketHandler.loopIndex += 1
 
         chart_loop = tornado.ioloop.IOLoop.instance()
-        schedule = tornado.ioloop.PeriodicCallback(sendChartData, 2000, io_loop = chart_loop)
+        schedule = tornado.ioloop.PeriodicCallback(sendChartData, 2000, io_loop=chart_loop)
         schedule.start()
-
-    @classmethod
-    def update_data(cls, datap):
-        cls.data.append(datap)
-        cls.send_updates(cls.data)
-        print(cls.data)

@@ -131,6 +131,7 @@ var margin = {top: 20, right: 20, bottom: 30, left: 50},
     d3.csv("static/data.csv", function(error, csv) {
         var accessor = ohlc.accessor();
         feed = csv.map(function(d) {
+            console.log(d.Date);
             return {
                 date: parseDate(d.Date),
                 open: +d.Open,
@@ -184,18 +185,18 @@ var margin = {top: 20, right: 20, bottom: 30, left: 50},
         svg.select("g.crosshair.ohlc").call(crosshair);
 
         // Set next timer expiry
-        setTimeout(function() {
-            if(feed.length) {
-                // Simulate a daily feed
-                data.push(feed.shift());
-            }
-            else {
-                // Simulate intra day updates when no feed is left
-                var last = data[data.length-1];
-                // Last must be between high and low
-                last.close = Math.round(((last.high - last.low)*Math.random())*10)/10+last.low;
-            }
-
-            redraw();
-        }, (Math.random()*1000)+400); // Randomly pick an interval to update the chart
+//        setTimeout(function() {
+//            if(feed.length) {
+//                // Simulate a daily feed
+//                data.push(feed.shift());
+//            }
+//            else {
+//                // Simulate intra day updates when no feed is left
+//                var last = data[data.length-1];
+//                // Last must be between high and low
+//                last.close = Math.round(((last.high - last.low)*Math.random())*10)/10+last.low;
+//            }
+//
+//            redraw();
+//        }, (Math.random()*1000)+400); // Randomly pick an interval to update the chart
     }
