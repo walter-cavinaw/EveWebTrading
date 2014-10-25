@@ -40,7 +40,7 @@ class ChartSocketHandler(tornado.websocket.WebSocketHandler):
         logging.info("Message from client: " + message)
         parsed = tornado.escape.json_decode(message)
         ticker = parsed["ticker"]
-        logging.info("Client is requesting live data for ticker " + ticker);
+        logging.info("Client is requesting live data for ticker " + ticker)
 
         # read data.csv
         f = open("static/data.csv")
@@ -49,11 +49,9 @@ class ChartSocketHandler(tornado.websocket.WebSocketHandler):
 
         # temporary method to send a line of data every 2 seconds
         def sendChartData():
-            indexToRead = ChartSocketHandler.loopIndex
-            logging.info(indexToRead)
-            if indexToRead == 0:
-                indexToRead = 88
+            if ChartSocketHandler.loopIndex == 0:
                 ChartSocketHandler.loopIndex = 88
+            indexToRead = ChartSocketHandler.loopIndex
             if indexToRead > 1:
                 message_arr = lines[indexToRead].split(",")
                 message = {"date": message_arr[0],

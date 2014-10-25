@@ -2,6 +2,7 @@ import logging
 import uuid
 import tornado.escape
 import tornado.websocket
+from CDASimulator.OrderTypes import Order, LimitOrder, MarketOrder, MidPointOrder
 
 
 class UserSocketHandler(tornado.websocket.WebSocketHandler):
@@ -50,17 +51,27 @@ class UserSocketHandler(tornado.websocket.WebSocketHandler):
                 "type": parsed["type"],
                 "ticker": parsed["ticker"],
                 "shares": int(parsed["shares"]),
-                "price": int(parsed["price"]),
                 "id": str(uuid.uuid4()),
                 }
-            order['html'] = tornado.escape.to_basestring(
-               self.render_string("message.html", message=order))
+            if 'price' in parsed:
+                order["price"] = int(parsed["price"])
+            else:
+                order['price'] = None
+            # order['html'] = tornado.escape.to_basestring(
+            #    self.render_string("message.html", message=order))
             # Check the order parameters some more: is the ticker valid
             #                Are the prices and share amounts reasonable
+            ex_order = UserSocketHandler.create_order(order)
+            self.exchange.assert_is_order(ex_order)
             # Then send the order through to get processed
 
             # UserSocketHandler.update_cache(chat)
             # UserSocketHandler.send_updates(chat)
+            success_notify = {"type": "notification",
+                              "html": tornado.escape.to_basestring(
+                                  self.render_string("success.html", message=ex_order.__str__()))
+                              }
+            UserSocketHandler.send_updates(success_notify)
         except:
             logging.error("Error when parsing Order data", exc_info=False)
             error_notify = {"type": "notification"}
@@ -70,7 +81,27 @@ class UserSocketHandler(tornado.websocket.WebSocketHandler):
             UserSocketHandler.send_updates(error_notify)
 
     @classmethod
-    def update_data(cls, datap):
-        cls.data.append(datap)
-        cls.send_updates(cls.data)
-        print(cls.data)
+    def create_order(cls, order):
+        type = order["type"]
+        trade = order["trade"]
+        size = order["shares"]
+        ticker = order["ticker"]
+        price = order["price"]
+        ex_order = Order()
+        if type == "Market":
+            ex_order = MarketOrder()
+        elif type == "Limit":
+            ex_order = LimitOrder()
+        elif type == "MidPoint":
+            ex_order = MidPointOrder()
+        if trade == "Buy":
+            ex_order.set_buy(True)
+        elif trade == "Sell":
+            ex_order.set_buy(False)
+        ex_order.set_size(size)
+        ex_order.set_stock_ticker(ticker)
+        if price is not None:
+            ex_order.set_limit(price)
+        return ex_order
+
+

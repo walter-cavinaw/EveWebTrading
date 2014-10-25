@@ -3,7 +3,7 @@
 
 class Order(object):
 
-    def __init__(self, stock_ticker, size, origin, buy, **kwds):
+    def __init__(self, stock_ticker=None, size=None, origin=None, buy=None, **kwds):
         self.origin = origin
         self.stock_ticker = stock_ticker
         self.size = size
@@ -16,6 +16,12 @@ class Order(object):
 
     def set_size(self, size):
         self.size = size
+
+    def set_buy(self, buy):
+        self.buy = buy
+
+    def set_origin(self, origin):
+        self.origin = origin
 
     def set_remaining_shares(self, remaining):
         self.remaining = remaining

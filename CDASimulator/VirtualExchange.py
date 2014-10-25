@@ -11,6 +11,7 @@ class VirtualExchange(object):
     def __init__(self, companies):
         super(VirtualExchange, self).__init__()
         self.engine_list = []
+        self.companies = companies
         for company in companies:
             new_engine = MatchingEngine(company.get_stock())
             self.engine_list.append((new_engine, threading.Semaphore()))
@@ -61,6 +62,8 @@ class VirtualExchange(object):
                     return True
 
     def assert_is_order(self, order):
-        return True
-
-
+        for company in self.companies:
+            if order.get_stock_ticker() == company.get_stock():
+                if order.get_size() < company.get_shares():
+                    return True
+        return False

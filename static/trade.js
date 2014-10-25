@@ -31,6 +31,7 @@ jQuery.fn.formToDict = function() {
     var fields = this.serializeArray();
     var json = {};
     var isEmpty = false;
+    console.log(fields);
     for (var i = 0; i < fields.length; i++) {
         if (fields[i].value == '') isEmpty = true;
         json[fields[i].name] = fields[i].value;
@@ -92,6 +93,7 @@ function checkOrder(select){
     var limit = $('#limit');
     if (select.value == 'Market'){
         limit.prop('disabled', true);
+        limit.val(null);
         limit.attr('placeholder', 'Limit Not Available');
     } else {
         limit.prop('disabled', false);

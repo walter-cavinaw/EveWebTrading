@@ -5,7 +5,7 @@ from Order import Order
 
 class MidPointOrder(Order):
 
-    def __init__(self, stock, size, limit, origin, buy, **kwds):
+    def __init__(self, stock=None, size=None, limit=None, origin=None, buy=None, **kwds):
         super(MidPointOrder, self).__init__(stock, size, origin, buy, **kwds)
         self.limit = limit
 
