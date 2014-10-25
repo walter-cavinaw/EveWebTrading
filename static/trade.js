@@ -77,13 +77,12 @@ var chartUpdater = {
     showMessage: function(message) {
             var datum = {
                 date: parseDate(message.date),
-                open: message.open,
-                high: message.high,
-                low: message.low,
-                close: message.close,
-                volume: message.volume
+                open: parseFloat(message.open),
+                high: parseFloat(message.high),
+                low: parseFloat(message.low),
+                close: parseFloat(message.close),
+                volume: parseInt(message.volume)
             };
-            console.log(JSON.stringify(datum));
             data.push(datum);
             redraw();
     }

@@ -131,7 +131,6 @@ var margin = {top: 20, right: 20, bottom: 30, left: 50},
     d3.csv("static/data.csv", function(error, csv) {
         var accessor = ohlc.accessor();
         feed = csv.map(function(d) {
-            console.log(d.Date);
             return {
                 date: parseDate(d.Date),
                 open: +d.Open,
@@ -144,6 +143,8 @@ var margin = {top: 20, right: 20, bottom: 30, left: 50},
 
         // The removed becomes the initial data, the remaining becomes the feed
         data = feed.splice(0, 163);
+
+        console.log(data[data.length-1]);
 
         svg.select("g.candlestick").datum(data);
         svg.select("g.sma.ma-0").datum(sma0Calculator(data));
