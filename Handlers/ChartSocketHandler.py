@@ -11,7 +11,7 @@ class ChartSocketHandler(tornado.websocket.WebSocketHandler):
     cache_size = 200
 
     # temporary loop index
-    loopIndex = 164;
+    loopIndex = 0
 
     def open(self):
         print("Chart websocket opened")
@@ -49,21 +49,24 @@ class ChartSocketHandler(tornado.websocket.WebSocketHandler):
 
         # temporary method to send a line of data every 2 seconds
         def sendChartData():
-            indexToRead = ChartSocketHandler.loopIndex % lineCount
+            indexToRead = ChartSocketHandler.loopIndex
+            logging.info(indexToRead)
             if indexToRead == 0:
-                indexToRead = 1
-            message_arr = lines[indexToRead].split(",")
-            message = {"date": message_arr[0],
-                       "open": message_arr[1],
-                       "high": message_arr[2],
-                       "low": message_arr[3],
-                       "close": message_arr[4],
-                       "volume": message_arr[5]
-                      }
-            logging.info(message)
-            ChartSocketHandler.send_updates(message)
-            # iterate the loop index
-            ChartSocketHandler.loopIndex += 1
+                indexToRead = 88
+                ChartSocketHandler.loopIndex = 88
+            if indexToRead > 1:
+                message_arr = lines[indexToRead].split(",")
+                message = {"date": message_arr[0],
+                           "open": message_arr[1],
+                           "high": message_arr[2],
+                           "low": message_arr[3],
+                           "close": message_arr[4],
+                           "volume": message_arr[5]
+                          }
+                logging.info(message)
+                ChartSocketHandler.send_updates(message)
+                # iterate the loop index
+                ChartSocketHandler.loopIndex -= 1
 
         chart_loop = tornado.ioloop.IOLoop.instance()
         schedule = tornado.ioloop.PeriodicCallback(sendChartData, 2000, io_loop=chart_loop)
