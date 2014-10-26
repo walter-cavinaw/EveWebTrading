@@ -12,9 +12,9 @@
     <title>{% block title %}eve trading home{% endblock %}</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="{{ static_url('bootstrap.css') }}" rel="stylesheet">
-    <link href="{{ static_url('material.min.css') }}" rel="stylesheet">
-    <link href="{{ static_url('ripples.min.css') }}" rel="stylesheet">
+    <link href="{% static 'bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'material.min.css' %}" rel="stylesheet">
+    <link href="{% static 'ripples.min.css' %}" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="{% static 'navbar.css' %}" rel="stylesheet">
@@ -74,19 +74,23 @@
     {% block content %}{% endblock %}
 </div>
 
-<div class="footer">
-    <div class="container">
-        {% block footer %}<p>Thank you for using our service</p>{% endblock %}
-    </div>
+<div class="container">
+    <nav class="navbar navbar-default navbar-fixed-bottom">
+        <div class="navbar-inner navbar-content-center">
+            <div id="footer" class="footer">
+                {% block footer %}{% endblock %}
+            </div>
+        </div>
+    </nav>
 </div>
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="{{ static_url('jquery-1.11.1.js') }}"></script>
-<script src="{{ static_url('bootstrap.js') }}"></script>
-<script src="{{ static_url('material.min.js') }}"></script>
-<script src="{{ static_url('ripples.min.js') }}"></script>
+<script src="{% static 'jquery-1.11.1.js' %}"></script>
+<script src="{% static 'bootstrap.js' %}"></script>
+<script src="{% static 'material.min.js' %}"></script>
+<script src="{% static 'ripples.min.js' %}"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
 </body>
