@@ -42,3 +42,9 @@
 {% block footer %}
 <div id="notification" class="alert alert-info">Welcome to eve. This is the notification bar</div>
 {% end %}
+
+{% block scripts %}
+<script>
+    $('.nav a:contains("home")').parent().addClass('active');
+</script>
+{% end %}
