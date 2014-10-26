@@ -1,13 +1,49 @@
-{% extends 'base-django.html' %}
+{%  extends "base-django.html" %}
 
-{% block content %}
-<div class="jumbotron">
-        <h1>Navbar example</h1>
-        <p>This is a quick test of django templating. Click the button below to enter the chatroom</p>
-        <p>
-          <a class="btn btn-lg btn-primary" href="chat" role="button">View navbar docs &raquo;</a>
-        </p>
-      </div>
+{%  block headers %}
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" xmlns="http://www.w3.org/1999/html"
+      xmlns="http://www.w3.org/1999/html"/>
+<title>eve trading</title>
 {% endblock %}
 
-{% block footer %}<p class="text-muted">This is the home page</p>{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="jumbotron">
+        <h1>Zero commissions. Zero fees.</h1>
+        <p>Trade in Canada's most best brokerage platform.</p>
+        <p>
+            <a class="btn btn-lg btn-primary" href="" role="button">Learn more &raquo;</a>
+        </p>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <h2>State of the art technology</h2>
+            <p>
+                Using Python and Tornado, experience the fastest web trading platform available.
+            </p>
+        </div>
+        <div class="col-lg-3">
+            <h2>Intuitive interface</h2>
+            <p>
+                It's that fuckin' easy.
+            </p>
+        </div>
+        <div class="col-lg-3">
+            <h2>Investment help</h2>
+            <p>
+                New to investing? We'll help you out.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<div id="notification" class="alert alert-info">Welcome to eve. This is the notification bar</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $('.nav a:contains("home")').parent().addClass('active');
+</script>
+{% endblock %}
