@@ -10,5 +10,9 @@ It uses python's tornado framework, along with websockets to push data to the en
 Will Include:
 
 real time stock data (based on fake stocks traded on the exchange)
+
 News data (modeled after news events that occur around real stocks)
 
+Best bids and asks from the order book.
+
+Portfolio Information regarding security holdings.
