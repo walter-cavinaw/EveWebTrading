@@ -29,6 +29,7 @@ from tornado.options import define, options
 
 from CDASimulator.VirtualExchange import VirtualExchange
 from CDASimulator.ExchangeObjects.Company import Company
+from Handlers.HomeHandler import HomeHandler
 from Handlers.ChartSocketHandler import ChartSocketHandler
 from Handlers.MainHandler import MainHandler
 from Handlers.UserSocketHandler import UserSocketHandler
@@ -43,6 +44,7 @@ class Application(tornado.web.Application):
         wsgi_app = tornado.wsgi.WSGIContainer(
         django.core.handlers.wsgi.WSGIHandler())
         handlers = [
+            (r"/", HomeHandler),
             # Homepage is routed here
             (r"/trade", MainHandler),
             # Requests to get/post order data are routed here
