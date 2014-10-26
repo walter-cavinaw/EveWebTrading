@@ -10,11 +10,6 @@
 
 {% block content %}
     <div class="container">
-      <div id="inbox">
-        {% for message in messages %}
-          {% include "message.html" %}
-        {% end %}
-      </div>
       <div class="row" id="input">
         <form id="messageform" class="form-inline" role="form">
            <select name="trade" class="form-control">

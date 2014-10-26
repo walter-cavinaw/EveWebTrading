@@ -57,8 +57,6 @@ class UserSocketHandler(tornado.websocket.WebSocketHandler):
                 order["price"] = int(parsed["price"])
             else:
                 order['price'] = None
-            # order['html'] = tornado.escape.to_basestring(
-            #    self.render_string("message.html", message=order))
             # Check the order parameters some more: is the ticker valid
             #                Are the prices and share amounts reasonable
             ex_order = UserSocketHandler.create_order(order)

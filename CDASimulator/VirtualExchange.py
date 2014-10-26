@@ -64,6 +64,6 @@ class VirtualExchange(object):
     def assert_is_order(self, order):
         for company in self.companies:
             if order.get_stock_ticker() == company.get_stock():
-                if order.get_size() < company.get_shares():
-                    return True
+                size_ok = (order.get_size() < company.get_shares())
+                return size_ok and (order.get_buy() is not None) and (order.origin is not None)
         return False
