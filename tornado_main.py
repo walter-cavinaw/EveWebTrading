@@ -20,6 +20,7 @@ from CDASimulator.ExchangeObjects.Company import Company
 from Handlers.ChartSocketHandler import ChartSocketHandler
 from Handlers.MainHandler import MainHandler
 from Handlers.UserSocketHandler import UserSocketHandler
+from Handlers.LoginHandler import LoginHandler
 
 
 define("port", default=8888, help="run on the given port", type=int)
@@ -36,6 +37,7 @@ class Application(tornado.web.Application):
             # Requests to get/post order data are routed here
             (r"/usersocket", UserSocketHandler),
             (r"/chartsocket", ChartSocketHandler),
+            (r"/auth/login", LoginHandler),
             (r'.*', tornado.web.FallbackHandler, dict(fallback=wsgi_app)),
         ]
         settings = dict(
