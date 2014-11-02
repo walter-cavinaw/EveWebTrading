@@ -9,7 +9,7 @@ class LoginHandler(BaseHandler):
     def post(self):
         print self.get_argument("name")
         self.set_secure_cookie("user", self.get_argument("name"))
-        self.redirect("/trade")
+        self.redirect(self.get_argument("next", "/"))
 
 
 class LogoutHandler(BaseHandler):

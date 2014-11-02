@@ -1,10 +1,10 @@
-{%  extends "base-django.html" %}
+{%  extends "base-tornado.html" %}
 
 {%  block headers %}
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" xmlns="http://www.w3.org/1999/html"
       xmlns="http://www.w3.org/1999/html"/>
 <title>eve trading</title>
-{% endblock %}
+{% end %}
 
 {% block content %}
 <div class="container">
@@ -36,14 +36,14 @@
         </div>
     </div>
 </div>
-{% endblock %}
+{% end %}
 
 {% block footer %}
 <div id="notification" class="alert alert-info">Welcome to eve. This is the notification bar</div>
-{% endblock %}
+{% end %}
 
 {% block scripts %}
 <script>
-    $('.nav a:contains("home")').parent().addClass('active');
+    $('#homeNav').addClass('active');
 </script>
-{% endblock %}
+{% end %}

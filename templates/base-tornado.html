@@ -35,7 +35,6 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                {% block leftnav %}
                 <li id="homeNav"><a href="/">home</a></li>
                 <li id="tradeNav"><a href="trade">trade</a></li>
                 <li class="dropdown">
@@ -50,13 +49,14 @@
                         <li><a href="#">One more separated link</a></li>
                     </ul>
                 </li>
-                {% end %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                {% block rightnav %}
-                <li><a href="">about us</a></li>
-                <li><a href="../navbar-static-top/">contact</a></li>
-                {% end %}
+            {% if current_user %}
+                <li><a><b> {{ current_user }}</b></a></li>
+                <li><a href="/auth/logout">Sign out</a></li>
+            {% else %}
+                <li><a href="/auth/login">Login</a></li>
+            {% end %}
             </ul>
         </div>
         <!--/.nav-collapse -->
@@ -83,8 +83,7 @@
 <script src="{{ static_url('bootstrap.js') }}"></script>
 <script src="{{ static_url('material.min.js') }}"></script>
 <script src="{{ static_url('ripples.min.js') }}"></script>
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+
 {% block scripts %}{% end %}
 </body>
 </html>
