@@ -14,7 +14,7 @@ class ChartSocketHandler(tornado.websocket.WebSocketHandler):
     loopIndex = 0
 
     def open(self):
-        print("Chart websocket opened")
+        logging.info("Chart websocket opened")
         ChartSocketHandler.waiters.add(self)
 
     def on_close(self):

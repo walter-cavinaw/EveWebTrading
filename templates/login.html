@@ -1,0 +1,27 @@
+{%  extends "base-tornado.html" %}
+
+{% block content %}
+    <!-- Custom styles for this template -->
+    <link href="{{ static_url('signin.css') }}" rel="stylesheet">
+
+
+    <div class="container">
+
+      <form class="form-signin" role="form" action="/auth/login" method="post">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <input name="name" type="email" class="form-control" placeholder="Email address" required autofocus>
+        <input type="password" class="form-control" placeholder="Password" required>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      </form>
+
+    </div>
+{% end %}
+
+{% block footer %}
+<div id="notification" class="alert alert-warning">Please sign in before trading</div>
+{% end %}

@@ -1,5 +1,6 @@
 import logging
 import uuid
+import tornado.web
 import tornado.escape
 import tornado.websocket
 from CDASimulator.OrderTypes import Order, LimitOrder, MarketOrder, MidPointOrder
