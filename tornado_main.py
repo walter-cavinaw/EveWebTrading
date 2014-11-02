@@ -20,7 +20,7 @@ from CDASimulator.ExchangeObjects.Company import Company
 from Handlers.ChartSocketHandler import ChartSocketHandler
 from Handlers.MainHandler import MainHandler
 from Handlers.UserSocketHandler import UserSocketHandler
-from Handlers.LoginHandler import LoginHandler
+from Handlers.AuthHandler import LoginHandler
 
 
 define("port", default=8888, help="run on the given port", type=int)

@@ -1,9 +1,9 @@
 import tornado.web
-from Handlers.UserSocketHandler import UserSocketHandler
+from BaseHandler import BaseHandler
 
 
-class MainHandler(tornado.web.RequestHandler):
+class MainHandler(BaseHandler):
 
-    # @tornado.web.authenticated
+    @tornado.web.authenticated
     def get(self):
         self.render("index.html")
