@@ -10,7 +10,7 @@
 <div class="container">
     <div class="jumbotron">
         <h1>Zero commissions. Zero fees.</h1>
-        <p>Trade in Canada's most best brokerage platform.</p>
+        <p>Trade in Canada's best brokerage platform.</p>
         <p>
             <a class="btn btn-lg btn-primary" href="" role="button">Learn more &raquo;</a>
         </p>
@@ -25,7 +25,7 @@
         <div class="col-lg-3">
             <h2>Intuitive interface</h2>
             <p>
-                It's that fuckin' easy.
+                It's just that easy.
             </p>
         </div>
         <div class="col-lg-3">
@@ -35,7 +35,70 @@
             </p>
         </div>
     </div>
+
+            <div class="row" style="height: 50px"></div>
+
+			<!-- If the user is not logged in, show generic home page -->
+			<div id="portfolioList">
+				{% for portfolio in portfolios %}
+					<div class="row portfolio-row" id="{{portfolio}}">
+						<div class="col-lg-2 summary">
+							<strong style="font-size: 200%"><a>{{portfolio.name}}</a></strong>
+							<strong style="font-size: 200%">(Portfolio)</strong>
+							<br>
+						</div>
+						<div class="col-lg-5" style="padding: 0">
+							<!-- <canvas class="chart" width="300px" height="120px"></canvas> -->
+						</div>
+						<div class="col-lg-4 news" style="padding-left: 20px">
+							<p><strong>Something</strong></p>
+						</div>
+						<div class="col-lg-1 options">
+							<p><a>Edit</a></p>
+							<p class="delete"><a>Delete</a></p>
+						</div>
+						<div class="col-lg-12">
+							<hr>
+						</div>
+					</div>
+				{% end %}
+			</div> <!-- portfolioList -->
+
+			<div id="stocksList">
+				{% for stock in stocks %}
+					<div class="row stock-row" id={{stock.get("ticker")}}>
+						<div class="col-lg-2 summary">
+							<strong style="font-size: 200%"><a>{{stock.get("ticker")}}</a></strong>
+							<br>
+						</div>
+						<div class="col-lg-5" style="padding: 0">
+							<canvas class="chart" width="300px" height="150px"></canvas>
+						</div>
+						<div class="col-lg-4 news" style="padding-left: 20px">
+							<p><strong>{{stock.get("ticker")}} News</strong></p>
+							<ul id="newsList"></ul>
+							<div class="col-lg-2">
+								<div id="newsNext" style="cursor: pointer">Prev</div>
+							</div>
+							<div class="col-lg-2">
+								<div id="newsPrev" style="cursor: pointer">Next</div>
+							</div>
+						</div>
+						<div class="col-lg-1 options">
+							<p><a>Edit</a></p>
+							<p class="delete"><a>Delete</a></p>
+						</div>
+						<div class="col-lg-12">
+							<hr>
+						</div>
+					</div>
+				{% end %}
+			</div>	<!-- stocksList -->
+
 </div>
+
+
+
 {% end %}
 
 {% block footer %}
@@ -43,7 +106,57 @@
 {% end %}
 
 {% block scripts %}
+<script id="stock-template" type="text/x-handlebars-template">
+    <div class="row stock-row" id="{!{ticker}}">
+        <div class="col-lg-2 summary">
+            <strong style="font-size: 200%"><a>{!{ticker}}</a></strong>
+            <br>
+        </div>
+        <div class="col-lg-5" style="padding: 0">
+            <canvas class="chart" width="300px" height="150px"></canvas>
+        </div>
+        <div class="col-lg-4 news" style="padding-left: 20px">
+            <p><strong>{!{ticker}} News</strong></p>
+            <ul id="newsList"></ul>
+            <div class="col-lg-2">
+                <div id="newsNext" style="cursor: pointer">Prev</div>
+            </div>
+            <div class="col-lg-2">
+                <div id="newsPrev" style="cursor: pointer">Next</div>
+            </div>
+        </div>
+        <div class="col-lg-1 options">
+            <p><a>Edit</a></p>
+            <p class="delete"><a>Delete</a></p>
+        </div>
+        <div class="col-lg-12">
+            <hr>
+        </div>
+    </div>
+</script>
+
+<script id="news-template" type="text/x-handlebars-template">
+    <li>
+        <a href="{!{link}}" style="">{!{headline}}</a>
+    </li>
+</script>
+<script src="{{ static_url('portfolio/stockListings.js') }}"></script>
+<script src="{{ static_url('portfolio/utils.js') }}"></script>
+<script src="{{ static_url('portfolio/newsTicker.js') }}"></script>
+<script src="{{ static_url('portfolio/chart.js') }}"></script>
+<script src="{{ static_url('jquery-ui.min.js') }}"></script>
+<script src="{{ static_url('handlebars.js') }}"></script>
+<script src="{{ static_url('underscore.js') }}"></script>
 <script>
     $('#homeNav').addClass('active');
+    $(document).ready(function() {
+        var stockString = "{{jsonpickle.encode(stocks)}}".replace(/&quot;/g,'"');
+        var portfolioString = "{{jsonpickle.encode(portfolios)}}".replace(/&quot;/g,'"');
+        console.log(JSON.parse(stockString));
+        stockListings.init({
+            stocks: JSON.parse(stockString),
+            portfolios: JSON.parse(portfolioString)
+        });
+    });
 </script>
 {% end %}
