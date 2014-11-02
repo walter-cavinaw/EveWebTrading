@@ -21,8 +21,12 @@ class UserSocketHandler(tornado.websocket.WebSocketHandler):
         return {}
 
     def open(self):
-        logging.info("user websocket opened")
-        UserSocketHandler.waiters.add(self)
+        if not self.get_secure_cookie("name"):
+            logging.info("user websocket opened")
+            UserSocketHandler.waiters.add(self)
+        else:
+            logging.info("user not authenticated")
+            self.close()
 
     def on_close(self):
         UserSocketHandler.waiters.remove(self)

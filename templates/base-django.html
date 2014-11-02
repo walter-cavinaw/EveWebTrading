@@ -17,9 +17,6 @@
     <link href="{% static 'ripples.min.css' %}" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="{% static 'navbar.css' %}" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
     <link href=" {% static 'sticky-footer-navbar.css' %}" rel="stylesheet">
 </head>
 
@@ -43,7 +40,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     {% block leftnav %}
-                    <li id="homeNav"><a href="">home</a></li>
+                    <li id="homeNav"><a href="/">home</a></li>
                     <li id="tradeNav"><a href="trade">trade</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">options<span
@@ -91,7 +88,8 @@
 <script src="{% static 'bootstrap.js' %}"></script>
 <script src="{% static 'material.min.js' %}"></script>
 <script src="{% static 'ripples.min.js' %}"></script>
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+
+{% block scripts %}{% endblock %}
+
 </body>
 </html>
