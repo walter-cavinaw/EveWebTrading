@@ -5,5 +5,5 @@ create table users
 	KEY (id));
 
 insert into users
-values ('dev', 'test');
+values ('dev@test.com', 'test');
 	

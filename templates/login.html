@@ -7,10 +7,10 @@
 
     <div class="container">
 
-      <form class="form-signin" role="form" action="/auth/login" method="post">
+      <form class="form-signin" role="form" action="/auth/login?next={{ next }}" method="post">
         <h2 class="form-signin-heading">Please sign in</h2>
-        <input name="name" type="email" class="form-control" placeholder="Email address" required autofocus>
-        <input type="password" class="form-control" placeholder="Password" required>
+        <input name="user_email" type="email" class="form-control" placeholder="Email address" required autofocus>
+        <input name="password" type="password" class="form-control" placeholder="Password" required>
         <div class="checkbox">
           <label>
             <input type="checkbox" value="remember-me"> Remember me

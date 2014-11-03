@@ -4,9 +4,6 @@
 
 import os.path
 import threading
-
-import django
-import django.core.handlers.wsgi
 import tornado.wsgi
 import tornado.escape
 import tornado.ioloop
@@ -14,6 +11,7 @@ import tornado.options
 import tornado.web
 import tornado.websocket
 from tornado.options import define, options
+import torndb
 
 from CDASimulator.VirtualExchange import VirtualExchange
 from CDASimulator.ExchangeObjects.Company import Company
@@ -21,13 +19,18 @@ from Handlers import ChartSocketHandler, MainHandler, UserSocketHandler, LoginHa
 
 
 define("port", default=8888, help="run on the given port", type=int)
-django.setup()
+define("mysql_host", default="localhost:3306", help="eve database host")
+define("mysql_database", default="eve", help="database/schema name: eve")
+define("mysql_user", default="eve_server", help="eve server login id")
+define("mysql_password", default="evetrading2014", help="eve server password")
+
 
 # Global configurations and routing goes here
 class Application(tornado.web.Application):
     def __init__(self):
-        wsgi_app = tornado.wsgi.WSGIContainer(
-        django.core.handlers.wsgi.WSGIHandler())
+        LoginHandler.set_db(torndb.Connection(
+            host=options.mysql_host, database=options.mysql_database,
+            user=options.mysql_user, password=options.mysql_password))
         handlers = [
             (r"/", HomeHandler),
             # Homepage is routed here
@@ -39,7 +42,7 @@ class Application(tornado.web.Application):
             (r"/auth/login", LoginHandler),
             (r"/auth/logout", LogoutHandler),
             # potentially get rid of this
-            (r'.*', tornado.web.FallbackHandler, dict(fallback=wsgi_app)),
+            (r'.*', HomeHandler),
         ]
         settings = dict(
             cookie_secret="__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__",
