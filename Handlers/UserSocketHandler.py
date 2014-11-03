@@ -21,7 +21,8 @@ class UserSocketHandler(tornado.websocket.WebSocketHandler):
         return {}
 
     def open(self):
-        if not self.get_secure_cookie("name"):
+        logging.info(self.get_secure_cookie("user"))
+        if self.get_secure_cookie("user"):
             logging.info("user websocket opened")
             UserSocketHandler.waiters.add(self)
         else:
@@ -48,7 +49,7 @@ class UserSocketHandler(tornado.websocket.WebSocketHandler):
 
 
     def on_message(self, message):
-        logging.info("got message %r", message)
+        logging.info("got message %r from user %r", message, self.get_secure_cookie("user"))
         parsed = tornado.escape.json_decode(message)
         try:
             order = {
@@ -57,6 +58,7 @@ class UserSocketHandler(tornado.websocket.WebSocketHandler):
                 "ticker": parsed["ticker"],
                 "shares": int(parsed["shares"]),
                 "id": str(uuid.uuid4()),
+                "user": self.get_secure_cookie("user"),
                 }
             if 'price' in parsed:
                 order["price"] = int(parsed["price"])
@@ -66,6 +68,7 @@ class UserSocketHandler(tornado.websocket.WebSocketHandler):
             #                Are the prices and share amounts reasonable
             ex_order = UserSocketHandler.create_order(order)
             self.exchange.assert_is_order(ex_order)
+
             # Then send the order through to get processed
 
             # UserSocketHandler.update_cache(chat)
@@ -76,7 +79,7 @@ class UserSocketHandler(tornado.websocket.WebSocketHandler):
                               }
             UserSocketHandler.send_updates(success_notify)
         except:
-            logging.error("Error when parsing Order data", exc_info=False)
+            logging.error("Error when parsing Order data", exc_info=True)
             error_notify = {"type": "notification"}
             error_notify["html"] = tornado.escape.to_basestring(
                 self.render_string("error.html", message="Order was not inputted correctly.")
