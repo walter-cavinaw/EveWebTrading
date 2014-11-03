@@ -2,6 +2,7 @@
 
 
 class Order(object):
+    type = "Order"
 
     def __init__(self, stock_ticker=None, size=None, origin=None, buy=None, **kwds):
         self.origin = origin
@@ -46,3 +47,12 @@ class Order(object):
 
     def get_buy(self):
         return self.is_buy
+
+    def __str__(self):
+        ret = self.type + " Order: "
+        if self.is_buy:
+            ret += "Buy "
+        else:
+            ret += "Sell "
+        ret += str(self.size) + " " + self.stock_ticker
+        return ret
