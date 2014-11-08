@@ -23,5 +23,11 @@
 {% end %}
 
 {% block footer %}
-<div id="notification" class="alert alert-warning">Please sign in before trading</div>
+     {% try %}
+        {% if notification %}
+        {% raw notification %}
+        {% end %}
+     {% except %}
+                    <div id="notification" class="alert alert-warning">Please sign in before trading</div>
+     {% end %}
 {% end %}

@@ -11,11 +11,11 @@ class LoginHandler(BaseHandler):
         cls.database = db
 
     def get(self):
-        logging.info(self.get_argument("next"))
+        logging.info(self.get_argument("next", "/"))
         return self.render('login.html', next=self.get_argument("next", "/"))
 
     def post(self):
-        logging.info(self.get_argument("next"))
+        logging.info(self.get_argument("next", "/"))
         # these strings need to be checked for random values. They can only be a-z, 0-9, @ and dot.
         email = self.get_argument("user_email")
         # this can only have a-z, 0-9, -,_, etc. Nothing that could mess up the query below.
@@ -26,7 +26,8 @@ class LoginHandler(BaseHandler):
             self.set_secure_cookie("user", email)
             self.redirect(self.get_argument("next", "/"))
         else:
-            self.render("login.html")
+            error_msg = self.render_string('error.html', message="Login Credentials were incorrect")
+            self.render("login.html", notification=error_msg)
 
 
 class LogoutHandler(BaseHandler):
