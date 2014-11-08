@@ -19,7 +19,7 @@ class Order(object):
         self.size = size
 
     def set_buy(self, buy):
-        self.buy = buy
+        self.is_buy = buy
 
     def set_origin(self, origin):
         self.origin = origin
@@ -49,7 +49,7 @@ class Order(object):
         return self.is_buy
 
     def __str__(self):
-        ret = self.type + " Order: "
+        ret = self.type + ": "
         if self.is_buy:
             ret += "Buy "
         else:
