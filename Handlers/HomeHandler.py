@@ -11,9 +11,6 @@ class HomeHandler(BaseHandler):
             {"ticker": "AAPL"},
             {"ticker": "GOOG"},
             {"ticker": "FB"},
-            {"ticker": "NFLX"},
             {"ticker": "TWTR"},
-            {"ticker": "BAC"},
-            {"ticker": "COST"},
         ]
         self.render("home.html", jsonpickle=jsonpickle, stocks=stocks, portfolios=portfolios)
