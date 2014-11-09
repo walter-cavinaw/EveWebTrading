@@ -1,4 +1,4 @@
-from AuthHandler import LoginHandler, LogoutHandler
+from AuthHandler import LoginHandler, LogoutHandler, RegisterHandler
 from BaseHandler import BaseHandler
 from ChartSocketHandler import ChartSocketHandler
 from HomeHandler import HomeHandler
