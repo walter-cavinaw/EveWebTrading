@@ -3,4 +3,5 @@ from BaseHandler import BaseHandler
 from ChartSocketHandler import ChartSocketHandler
 from HomeHandler import HomeHandler
 from MainHandler import MainHandler
+from PortfolioHandler import  PortfolioHandler
 from UserSocketHandler import UserSocketHandler
