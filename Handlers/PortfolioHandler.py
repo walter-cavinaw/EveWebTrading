@@ -10,7 +10,7 @@ class PortfolioHandler(BaseHandler):
         stocks = [
             {"ticker": "DIS"},
             {"ticker": "TSLA"},
-            {"ticker": "WFS"},
+            {"ticker": "WFM"},
             {"ticker": "AAPL"},
             {"ticker": "GOOG"},
             {"ticker": "SCTY"},
