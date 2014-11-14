@@ -61,7 +61,7 @@ class UserSocketHandler(tornado.websocket.WebSocketHandler):
                 "user": self.get_secure_cookie("user"),
                 }
             if 'price' in parsed:
-                order["price"] = int(parsed["price"])
+                order["price"] = float(parsed["price"])
             else:
                 order['price'] = None
             # Check the order parameters some more: is the ticker valid

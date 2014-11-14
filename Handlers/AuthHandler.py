@@ -18,7 +18,7 @@ class RegisterHandler(BaseHandler):
 
         if pwd == confirmPwd:
             hashedPwd = bcrypt.hashpw(pwd, bcrypt.gensalt())
-            logging.info("Hashed password: " + hashedPwd);
+            logging.info("Hashed password: " + hashedPwd)
             query = "INSERT INTO users (id, pass) VALUES (%s, %s)"
             LoginHandler.database.insert(query, email, hashedPwd)
             self.redirect("/auth/login")

@@ -12,10 +12,16 @@ Requirements
 ------------
 
 Must have python 2.7
+
 tornado
+
 jsonpickle
+
 mysqldb (for windows use a binary installer)
+
 torndb
+
+py-bcrypt (if using windows, you have to install MSFT Visual C++ Compiler for python 2.7)
 
 
 Will Include:

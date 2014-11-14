@@ -123,7 +123,7 @@
 <script src="{{ static_url('handlebars.js') }}"></script>
 <script src="{{ static_url('underscore.js') }}"></script>
 <script>
-    $('#homeNav').addClass('active');
+    $('#portfolioNav').addClass('active');
     $(document).ready(function() {
         var stockString = "{{jsonpickle.encode(stocks)}}".replace(/&quot;/g,'"');
         var portfolioString = "{{jsonpickle.encode(portfolios)}}".replace(/&quot;/g,'"');
