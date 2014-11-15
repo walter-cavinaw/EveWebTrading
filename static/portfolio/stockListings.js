@@ -97,7 +97,7 @@ var stockListings = (function(){
 				}
 			}
 		});
-
+        console.log(stockRowElements);
 		// Make YQL request per stock row
 		for(var i=0; i<stockRowElements.length; i++){
 			(function(i, stocks, stockRowElements){
