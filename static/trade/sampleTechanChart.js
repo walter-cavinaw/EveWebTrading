@@ -128,7 +128,7 @@ var margin = {top: 20, right: 20, bottom: 30, left: 50},
 
     var data, feed;
 
-    d3.csv("static/data.csv", function(error, csv) {
+    d3.csv("static/trade/data.csv", function(error, csv) {
         var accessor = ohlc.accessor();
         feed = csv.map(function(d) {
             return {

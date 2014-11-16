@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MongoConfiguration">
+    <option name="serverConfigurations">
+      <list>
+        <ServerConfiguration>
+          <option name="label" value="stockdata" />
+          <option name="password" value="evetrading2014" />
+          <option name="serverUrls">
+            <list>
+              <option value="localhost:27017" />
+            </list>
+          </option>
+          <option name="userDatabase" value="stockdata" />
+          <option name="username" value="eve_server" />
+        </ServerConfiguration>
+      </list>
+    </option>
+    <option name="shellPath" value="C:\MongoDB 2.6 Standard\bin\mongod" />
+  </component>
+</project>
+
