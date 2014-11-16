@@ -21,7 +21,7 @@ mysqldb (for windows use a binary installer)
 
 torndb
 
-py-bcrypt (if using windows, you have to install MSFT Visual C++ Compiler for python 2.7)
+py-bcrypt (The easiest way to install is to use the wheel @ https://bitbucket.org/alexandrul/py-bcrypt/downloads)
 
 
 Will Include:
