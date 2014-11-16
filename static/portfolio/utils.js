@@ -220,7 +220,7 @@ var drawChartFromTicker = function(ticker, row) {
 //
 //var drawNews = function(selector, ticker){
 //	// Uses this jquery news ticker library:
-//	// http://risq.github.io/jquery-advanced-news-ticker/index.html
+//	// http://risq.github.io/jquery-advanced-news-ticker/trade.html
 //	selector.find("#newsList").newsTicker({
 //		row_height: 40,
 //		duration: 10000,

@@ -6,4 +6,4 @@ class MainHandler(BaseHandler):
 
     @tornado.web.authenticated
     def get(self):
-        self.render("index.html")
+        self.render("trade.html")
