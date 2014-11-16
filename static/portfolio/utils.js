@@ -97,7 +97,7 @@ var drawChartFromTicker = function(ticker, row) {
             .attr("dy", ".71em")
             .style("text-anchor", "end")
             .text("Price ($)");
-    var recentData = data[0];
+    var recentData = data[data.length-1];
     var closePrice = recentData.close;
 	var changePrice = Number(recentData.close) - Number(recentData.open);
 	changePrice = changePrice.toFixed(2);
