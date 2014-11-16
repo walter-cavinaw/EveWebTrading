@@ -23,20 +23,6 @@ var stockListings = (function(){
 		$("#stockSubmit").on("click", function(){
 			var ticker = $("#tickerInput").val();
 
-			/*
-			// Draw the element without refreshing the page with the new data
-			var source = $("#stock-template").html();
-			var template = Handlebars.compile(source);
-			var context = {ticker: ticker}
-			var html = template(context);
-			$("#stocksList").prepend(html);
-
-			stockRowElements = $(".stock-row");
-			console.log($(stockRowElements[0]));
-			drawChartFromTicker(ticker, $(stockRowElements[0]));
-			*/
-
-
 			stocks.push({ticker: ticker});
 			// Update database via ajax only if user is logged in
 			if(currentUser != undefined){

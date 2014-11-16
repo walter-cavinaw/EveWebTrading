@@ -112,7 +112,7 @@
             <strong style="font-size: 200%"><a>{!{ticker}}</a></strong>
             <br>
         </div>
-        <div class="col-lg-5 chart" style="padding: 0">
+        <div class="col-lg-5 chart" id={{stock.get("ticker")+"chart"}}>
         </div>
         <div class="col-lg-4 news" style="padding-left: 20px">
             <p><strong>{!{ticker}} News</strong></p>
@@ -143,8 +143,6 @@
 <script src="http://techanjs.org/techan.min.js"></script>
 <script src="{{ static_url('portfolio/stockListings.js') }}"></script>
 <script src="{{ static_url('portfolio/utils.js') }}"></script>
-<script src="{{ static_url('portfolio/newsTicker.js') }}"></script>
-<script src="{{ static_url('portfolio/chart.js') }}"></script>
 <script src="{{ static_url('jquery-ui.min.js') }}"></script>
 <script src="{{ static_url('handlebars.js') }}"></script>
 <script src="{{ static_url('underscore.js') }}"></script>

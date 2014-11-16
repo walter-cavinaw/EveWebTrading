@@ -32,7 +32,6 @@ var drawChartFromTicker = function(ticker, row) {
     var auth = "&auth_token=sok7xuv8xDR_9LooZmaZ";
     var url = query+params+auth;
 
-    console.log(chartElement.height());
     var margin = {top: 20, right: 20, bottom: 30, left: 50},
         width = chartElement.width() - margin.left - margin.right,
         height = chartElement.height() - margin.top - margin.bottom;
@@ -65,7 +64,6 @@ var drawChartFromTicker = function(ticker, row) {
     d3.json(url, function (error, data) {
         var accessor = close.accessor();
         data = data.data;
-        console.log(data);
         data = data.map(function(d) {
             return {
                 date: parseDate(d[0]),
@@ -76,7 +74,6 @@ var drawChartFromTicker = function(ticker, row) {
                 volume: +d[5]
             };
         }).sort(function(a, b) { return d3.ascending(accessor.d(a), accessor.d(b)); });
-        console.log(data);
 
         x.domain(data.map(accessor.d));
         y.domain(techan.scale.plot.ohlc(data, accessor).domain());
@@ -100,8 +97,23 @@ var drawChartFromTicker = function(ticker, row) {
             .attr("dy", ".71em")
             .style("text-anchor", "end")
             .text("Price ($)");
+    var recentData = data[0];
+    var closePrice = recentData.close;
+	var changePrice = Number(recentData.close) - Number(recentData.open);
+	changePrice = changePrice.toFixed(2);
+
+	summaryElement.append("<strong style='font-size: 200%'>" + closePrice + "</strong>");
+	summaryElement.append($("<br>"));
+	if(changePrice == 0){
+		summaryElement.append("<strong style='font-size: 200%; color: black'>" + changePrice + "</strong>");
+	}	else if(changePrice < 0){
+		summaryElement.append("<strong style='font-size: 200%; color: #CC0000'>" + changePrice + "</strong>");
+	} else{
+		summaryElement.append("<strong style='font-size: 200%; color: #00CC00'>" + changePrice + "</strong>");
+	}
     });
 };
+
 
 //  $.ajax({
 //    url: url + params + auth,

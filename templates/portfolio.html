@@ -4,6 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" xmlns="http://www.w3.org/1999/html"
       xmlns="http://www.w3.org/1999/html"/>
 <title>eve trading</title>
+        <link href="{{ static_url('portfolio\chart.css') }}" rel="stylesheet">
 {% end %}
 
 {% block content %}
@@ -46,9 +47,8 @@
 							<strong style="font-size: 200%"><a>{{stock.get("ticker")}}</a></strong>
 							<br>
 						</div>
-						<div class="col-lg-5" style="padding: 0">
-							<canvas class="chart" width="300px" height="150px"></canvas>
-						</div>
+						 <div class="col-lg-5 chart" id={{stock.get("ticker")+"chart"}}>
+                        </div>
 						<div class="col-lg-4 news" style="padding-left: 20px">
 							<p><strong>{{stock.get("ticker")}} News</strong></p>
 							<ul id="newsList"></ul>
@@ -87,8 +87,7 @@
             <strong style="font-size: 200%"><a>{!{ticker}}</a></strong>
             <br>
         </div>
-        <div class="col-lg-5" style="padding: 0">
-            <canvas class="chart" width="300px" height="150px"></canvas>
+       <div class="col-lg-5 chart" id={{stock.get("ticker")+"chart"}}>
         </div>
         <div class="col-lg-4 news" style="padding-left: 20px">
             <p><strong>{!{ticker}} News</strong></p>
@@ -115,10 +114,10 @@
         <a href="{!{link}}" style="">{!{headline}}</a>
     </li>
 </script>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="http://techanjs.org/techan.min.js"></script>
 <script src="{{ static_url('portfolio/stockListings.js') }}"></script>
 <script src="{{ static_url('portfolio/utils.js') }}"></script>
-<script src="{{ static_url('portfolio/newsTicker.js') }}"></script>
-<script src="{{ static_url('portfolio/chart.js') }}"></script>
 <script src="{{ static_url('jquery-ui.min.js') }}"></script>
 <script src="{{ static_url('handlebars.js') }}"></script>
 <script src="{{ static_url('underscore.js') }}"></script>
