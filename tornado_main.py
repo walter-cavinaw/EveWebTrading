@@ -16,7 +16,7 @@ import torndb
 from CDASimulator.VirtualExchange import VirtualExchange
 from CDASimulator.ExchangeObjects.Company import Company
 from Handlers import ChartSocketHandler, MainHandler, UserSocketHandler, LoginHandler, LogoutHandler, \
-    HomeHandler, RegisterHandler, PortfolioHandler
+    HomeHandler, RegisterHandler, PortfolioHandler, StockHandler
 
 
 define("port", default=8888, help="run on the given port", type=int)
@@ -40,6 +40,7 @@ class Application(tornado.web.Application):
             # Requests to get/post order data are routed here
             (r"/usersocket", UserSocketHandler),
             # Chart data
+            (r"/stock", StockHandler),
             (r"/chartsocket", ChartSocketHandler),
             (r"/auth/login", LoginHandler),
             (r"/auth/logout", LogoutHandler),
