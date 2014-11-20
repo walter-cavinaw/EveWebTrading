@@ -21,7 +21,7 @@ if DEPLOYMENT == PRODUCTION:
     options.mysql_user = os.environ['CLEARDB_USER']
     options.mysql_password = os.environ['CLEARDB_PWD']
     options.mysql_database = os.environ['CLEARDB_DB']
-    options.port = os.environ['PORT']
+    options.port = int(os.environ['PORT'])
 
 
 settings = dict()
