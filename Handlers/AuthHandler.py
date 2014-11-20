@@ -35,8 +35,9 @@ class LoginHandler(BaseHandler):
         cls.database = db
 
     def get(self):
-        logging.info(self.get_argument("next", "/"))
-        return self.render('login.html', next=self.get_argument("next", "/"))
+        next_arg = self.get_argument("next", "/")
+        logging.info(next_arg)
+        return self.render('login.html', next=next_arg)
 
     def post(self):
         logging.info(self.get_argument("next", "/"))
