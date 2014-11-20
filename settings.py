@@ -18,6 +18,9 @@ else:
 
 if DEPLOYMENT == PRODUCTION:
     options.mysql_host = os.environ['CLEARDB_DATABASE_URL']
+    options.mysql_user = os.environ['CLEARDB_USER']
+    options.mysql_password = os.environ['CLEARDB_PWD']
+    options.mysql_database = os.environ['CLEARDB_DB']
 
 
 settings = dict()
