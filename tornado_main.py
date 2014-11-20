@@ -2,7 +2,6 @@
 #
 #the main script that runs the tornado server. Run this to start the server.
 
-import os.path
 import threading
 import tornado.wsgi
 import tornado.escape
@@ -10,20 +9,14 @@ import tornado.ioloop
 import tornado.options
 import tornado.web
 import tornado.websocket
-from tornado.options import define, options
+from tornado.options import options
 import torndb
+from settings import settings
 
 from CDASimulator.VirtualExchange import VirtualExchange
 from CDASimulator.ExchangeObjects.Company import Company
 from Handlers import ChartSocketHandler, MainHandler, UserSocketHandler, LoginHandler, LogoutHandler, \
     HomeHandler, RegisterHandler, PortfolioHandler, StockHandler
-
-
-define("port", default=8888, help="run on the given port", type=int)
-define("mysql_host", default="localhost:3306", help="eve database host")
-define("mysql_database", default="eve", help="database/schema name: eve")
-define("mysql_user", default="eve_server", help="eve server login id")
-define("mysql_password", default="evetrading2014", help="eve server password")
 
 
 # Global configurations and routing goes here
@@ -48,12 +41,6 @@ class Application(tornado.web.Application):
             # potentially get rid of this
             (r'.*', HomeHandler),
         ]
-        settings = dict(
-            cookie_secret="__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__",
-            login_url="/auth/login",
-            template_path=os.path.join(os.path.dirname(__file__), "templates"),
-            static_path=os.path.join(os.path.dirname(__file__), "static"),
-        )
         tornado.web.Application.__init__(self, handlers, **settings)
 
 
