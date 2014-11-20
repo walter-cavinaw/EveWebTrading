@@ -43,7 +43,7 @@ class ChartSocketHandler(tornado.websocket.WebSocketHandler):
         logging.info("Client is requesting live data for ticker " + ticker)
 
         # read data.csv
-        f = open("static/data.csv")
+        f = open("static/trade/data.csv")
         lines = [line.rstrip() for line in f]
         lineCount = len(lines)
 
