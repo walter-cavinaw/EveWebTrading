@@ -24,7 +24,7 @@ torndb
 py-bcrypt (The easiest way to install is to use the wheel @ https://bitbucket.org/alexandrul/py-bcrypt/downloads)
 
 Get it Running
-------------
+-------------
 
 You need an eve database in MySQL and a Mongo db called stockdata: Each collection in stockdata will be for one stock.
 
