@@ -1,1 +1,1 @@
-web: DEPLOYMENT_TYPE=PRODUCTION python tornado_main.py
+web: python tornado_main.py
