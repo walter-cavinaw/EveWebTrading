@@ -1,4 +1,5 @@
 from BaseHandler import BaseHandler
+import tornado.escape as esc
 import logging
 import bcrypt
 import torndb
@@ -35,12 +36,13 @@ class LoginHandler(BaseHandler):
         cls.database = db
 
     def get(self):
-        next_arg = self.get_argument("next", "/")
+        next_arg = esc.url_escape(self.get_argument("next", "/"))
         logging.info(next_arg)
         return self.render('login.html', next=next_arg)
 
     def post(self):
-        logging.info(self.get_argument("next", "/"))
+        next_arg = esc.url_escape(self.get_argument("next", "/"))
+        logging.info(next_arg)
         # these strings need to be checked for random values. They can only be a-z, 0-9, @ and dot.
         email = self.get_argument("user_email")
         # this can only have a-z, 0-9, -,_, etc. Nothing that could mess up the query below.
@@ -57,11 +59,11 @@ class LoginHandler(BaseHandler):
             else:
                 # password is incorrect
                 error_msg = self.render_string('error.html', message="Login Credentials were incorrect")
-                self.render("login.html", notification=error_msg)
+                self.render("login.html", notification=error_msg, next=next_arg)
         else:
             # user does not exist
             error_msg = self.render_string('error.html', message="Login Credentials were incorrect")
-            self.render("login.html", notification=error_msg)
+            self.render("login.html", notification=error_msg, next=next_arg)
 
 class LogoutHandler(BaseHandler):
 
