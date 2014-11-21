@@ -22,9 +22,9 @@ from Handlers import ChartSocketHandler, MainHandler, UserSocketHandler, LoginHa
 # Global configurations and routing goes here
 class Application(tornado.web.Application):
     def __init__(self):
-        LoginHandler.set_db(torndb.Connection(
+        self.db = torndb.Connection(
             host=options.mysql_host, database=options.mysql_database,
-            user=options.mysql_user, password=options.mysql_password))
+            user=options.mysql_user, password=options.mysql_password)
         handlers = [
             (r"/", HomeHandler),
             # Homepage is routed here

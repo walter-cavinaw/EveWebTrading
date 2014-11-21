@@ -8,32 +8,33 @@ import torndb
 class RegisterHandler(BaseHandler):
 
     def get(self):
-        logging.info(self.get_argument("next", "/"))
         return self.render("register.html")
 
     def post(self):
-        logging.info(self.get_argument("next", "/"))
         email = self.get_argument("user_email")
         pwd = self.get_argument("password")
         confirmPwd = self.get_argument("confirmPassword")
 
         if pwd == confirmPwd:
-            hashedPwd = bcrypt.hashpw(pwd, bcrypt.gensalt())
-            logging.info("Hashed password: " + hashedPwd)
-            query = "INSERT INTO users (id, pass) VALUES (%s, %s)"
-            LoginHandler.database.insert(query, email, hashedPwd)
-            self.redirect("/auth/login")
+            db = self.db
+            query = "SELECT * FROM users WHERE id = %s"
+            user = db.get(query, email)
+            if not user:
+                hashedPwd = bcrypt.hashpw(pwd, bcrypt.gensalt())
+                logging.info("Hashed password: " + hashedPwd)
+                query = "INSERT INTO users (id, pass) VALUES (%s, %s)"
+                db.reconnect()
+                db.insert(query, email, hashedPwd)
+                self.redirect("/auth/login")
+            else:
+                error_msg = self.render_string('error.html', message="This user already exists")
+                self.render("register.html", notification=error_msg)
         else:
             error_msg = self.render_string('error.html', message="The passwords don't match")
             self.render("register.html", notification=error_msg)
 
+
 class LoginHandler(BaseHandler):
-
-    database = None
-
-    @classmethod
-    def set_db(cls, db):
-        cls.database = db
 
     def get(self):
         next_arg = esc.url_escape(self.get_argument("next", "/"))
@@ -43,15 +44,17 @@ class LoginHandler(BaseHandler):
     def post(self):
         next_arg = esc.url_escape(self.get_argument("next", "/"))
         logging.info(next_arg)
+        db = self.db
+        db.reconnect()
         # these strings need to be checked for random values. They can only be a-z, 0-9, @ and dot.
         email = self.get_argument("user_email")
         # this can only have a-z, 0-9, -,_, etc. Nothing that could mess up the query below.
         pwd = self.get_argument("password")
         query = "SELECT * FROM users WHERE id = %s"
-        user = LoginHandler.database.get(query, email)
+        user = db.get(query, email)
         if user:
             # get hashed password from user
-            userRow = torndb.Row(user);
+            userRow = torndb.Row(user)
             hashedPwd = userRow.__getattr__("pass")
             if bcrypt.hashpw(pwd, hashedPwd) == hashedPwd:
                 self.set_secure_cookie("user", email)
