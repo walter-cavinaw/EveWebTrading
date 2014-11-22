@@ -16,7 +16,7 @@ from settings import settings
 from CDASimulator.VirtualExchange import VirtualExchange
 from CDASimulator.ExchangeObjects.Company import Company
 from Handlers import ChartSocketHandler, MainHandler, UserSocketHandler, LoginHandler, LogoutHandler, \
-    HomeHandler, RegisterHandler, PortfolioHandler, StockHandler
+    HomeHandler, RegisterHandler, PortfolioHandler, StockHandler, SearchHandler
 
 
 # Global configurations and routing goes here
@@ -33,7 +33,8 @@ class Application(tornado.web.Application):
             # Requests to get/post order data are routed here
             (r"/usersocket", UserSocketHandler),
             # Chart data
-            (r"/stock", StockHandler),
+            (r"/stock/?(.)*", StockHandler),
+            (r"/search", SearchHandler),
             (r"/chartsocket", ChartSocketHandler),
             (r"/auth/login", LoginHandler),
             (r"/auth/logout", LogoutHandler),

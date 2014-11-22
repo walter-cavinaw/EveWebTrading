@@ -52,6 +52,14 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <form id="search" class="navbar-form" role="form" action="/search" method="post">
+                        <div class="form-control-wrapper">
+                            <input name="ticker" type="text" class="form-control col-md-8 empty" placeholder="Search stocks">
+                            <span class="material-input"></span>
+                        </div>
+                    </form>
+                </li>
             {% if current_user %}
                 <li><a><b> {{ current_user }}</b></a></li>
                 <li><a href="/auth/logout">Sign out</a></li>
