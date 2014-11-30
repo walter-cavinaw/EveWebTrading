@@ -20,17 +20,17 @@ var drawChartFromTicker = function(ticker, row) {
     console.log(chart_width);
 
     var margin = {top: 20, right: 20, bottom: 30, left: 50},
-        width = chartElement.width() - margin.left - margin.right,
-        height = chartElement.height() - margin.top - margin.bottom;
+        prev_width = 0,
+        prev_height = 0;
 
     var parseDate = d3.time.format("%Y-%m-%d").parse;
 
     var x = techan.scale.financetime()
-        .range([0, width])
+        .range([0, prev_width])
         .outerPadding(0);
 
     var y = d3.scale.linear()
-        .range([height, 0]);
+        .range([prev_height, 0]);
 
     var close = techan.plot.close()
         .xScale(x)
@@ -44,8 +44,8 @@ var drawChartFromTicker = function(ticker, row) {
         .scale(y)
         .orient("left");
     var svg = d3.select(elem).append("svg")   // this needs to be fixed
-             .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
+             .attr("width", prev_width + margin.left + margin.right)
+            .attr("height", prev_height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     d3.json(url, function (error, data) {
@@ -99,6 +99,21 @@ var drawChartFromTicker = function(ticker, row) {
 		summaryElement.append("<strong style='font-size: 200%; color: #00CC00'>" + changePrice + "</strong>");
 	}
     });
+    updateChart(true, ticker);
+};
+
+var updateChart = function(init, ticker){
+    var width = document.getElementById(ticker+"chart").getBoundingClientRect().width - margin.left - margin.right;
+    var height = document.getElementById(ticker+"chart").getBoundingClientRect().height - margin.top - margin.bottom;
+    x.range([0, width]);
+    y.range([height, 0]);
+    svg.select('.x.axis')
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+    svg.select('.y.axis')
+        .call(yAxis);
+    svg.select('.close')
+        .call(close);
 };
 
 

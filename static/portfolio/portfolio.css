@@ -1,24 +1,24 @@
-.panel-heading {
-    font-size: 140%;
+.heading {
+    font-size: 90%;
     cursor: pointer;
     vertical-align: middle;
 }
 
-.panel-heading div:after {
+.heading div:after {
     font-family:'Glyphicons Halflings';
     content:"\e114";
     float: left;
-    color: grey;
+    color: #595959;
 }
 
-.panel-heading .collapsed:after {
+.heading .collapsed:after {
     content:"\e080";
 }
 
-.panel-heading a{
+.heading a{
     margin-left: 10px;
 }
 
-.panel-heading div:hover:after {
+.heading div:hover:after {
     color:#428bca;
 }
