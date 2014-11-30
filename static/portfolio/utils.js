@@ -6,26 +6,11 @@ var drawChartFromTicker = function(ticker, row) {
     var summaryElement = row.find(".summary");
     var newsElement = row.find(".news");
 
-    // var url = "http://query.yahooapis.com/v1/public/yql?q=";
-
     var currentDate = new Date();
     var currentDateString = currentDate.getFullYear() + "-" + ("0" + (currentDate.getMonth() + 1)).slice(-2) + "-" + ("0" + currentDate.getDate()).slice(-2);
     var previousDate = new Date();
-    ;
     var previousDate = new Date(previousDate.setMonth(currentDate.getMonth() - 3));
     var previousDateString = previousDate.getFullYear() + "-" + ("0" + (previousDate.getMonth() + 1)).slice(-2) + "-" + ("0" + previousDate.getDate()).slice(-2);
-
-    /*
-     // Previous query from yahoo finance
-     var query = 'select * from yahoo.finance.historicaldata where symbol = "'
-     + ticker
-     + '" and startDate = "'
-     + date6MonthsAgoString
-     + '" and endDate = "'
-     + currentDateString
-     + '"';
-     query = query + "&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=";
-     */
 
     var query = "http://www.quandl.com/api/v1/datasets/WIKI/" + ticker + ".json";
     var params = "?&trim_start=" + previousDateString + "&trim_end=" + currentDateString;
