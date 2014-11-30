@@ -31,6 +31,8 @@ var drawChartFromTicker = function(ticker, row) {
     var params = "?&trim_start=" + previousDateString + "&trim_end=" + currentDateString;
     var auth = "&auth_token=sok7xuv8xDR_9LooZmaZ";
     var url = query+params+auth;
+    var chart_width = document.getElementById(ticker+"chart").clientWidth;
+    console.log(chart_width);
 
     var margin = {top: 20, right: 20, bottom: 30, left: 50},
         width = chartElement.width() - margin.left - margin.right,
