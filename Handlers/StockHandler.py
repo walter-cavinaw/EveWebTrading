@@ -6,4 +6,5 @@ import logging
 class StockHandler(BaseHandler):
 
     def get(self, ticker):
-        return self.render('stock.html')
+        logging.info(ticker)
+        return self.render('stock.html', stock=ticker)
