@@ -9,7 +9,7 @@
 {% end %}
 
 {% block content %}
-<div class="container">
+<div class="container" ng-app="portfolio">
 
     <div class="row" style="height: 50px"></div>
 
@@ -41,18 +41,17 @@
 				{% end %}
 			</div> <!-- portfolioList -->
 
-			<div id="stocksList">
-				{% for stock in stocks %}
-					<div class="row stock-row" id={{stock.get("ticker")}}>
+			<div id="stocksList" ng-controller="ListController" ng-init="init({{jsonpickle.encode(stocks)}})">
+					<div class="row stock-row" ng-repeat="stock in stocks" id={{!stock.ticker}}>
 						<div class="heading">
-                            <div data-toggle="collapse" data-target={{"#"+stock.get("ticker")+"panel"}} href={{"#"+stock.get("ticker")+"panel"}} class="collapsed">
-                                <a href={{"/stock/"+stock.get("ticker")}}><strong>{{stock.get("ticker")}}</strong></a>
+                            <div ng-model="collapsed" href="#" ng-click="collapsed=!collapsed" class="ng-pristine ng-valid" ng-class="{testheader : collapsed}">
+                                <a href={{!"/stock/"+stock.ticker}}><strong ng-bind="stock.ticker"></strong></a>
                             </div>
                         </div>
-                        <div id={{stock.get("ticker")+"panel"}} class="update collapse out">
-						 <div class="col-lg-7 chart" id={{stock.get("ticker")+"chart"}}></div>
+                        <div id={{!stock.ticker+"panel"}} ng-show="collapsed">
+						 <stock-chart ticker='{{!stock.ticker}}' class="col-lg-7 chart" id={{!stock.ticker+"chart"}}></stock-chart>
 						<div class="col-lg-4 news" style="padding-left: 20px">
-							<p><strong>{{stock.get("ticker")}} News</strong></p>
+							<p><strong ng-bind="stock.ticker">News</strong></p>
 							<ul id="newsList"></ul>
 							<div class="col-lg-2">
 								<div id="newsNext" style="cursor: pointer">Prev</div>
@@ -70,7 +69,6 @@
                         <hr style="margin-bottom: 10px; margin-top: 10px; border-top: 1px solid #9a9a9a">
                     </div>
 					</div>
-				{% end %}
 			</div>	<!-- stocksList -->
             <div style="height:50px"></div>
 
@@ -85,23 +83,26 @@
 {% end %}
 
 {% block scripts %}
-
+<!--force update-->
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script src="http://techanjs.org/techan.min.js"></script>
 <script src="{{ static_url('portfolio/stockListings.js') }}"></script>
 <script src="{{ static_url('portfolio/utils.js') }}"></script>
 <script src="{{ static_url('jquery-ui.min.js') }}"></script>
 <script src="{{ static_url('underscore.js') }}"></script>
-<script>
-    $('#portfolioNav').addClass('active');
-    $(document).ready(function() {
-        var stockString = "{{jsonpickle.encode(stocks)}}".replace(/&quot;/g,'"');
-        var portfolioString = "{{jsonpickle.encode(portfolios)}}".replace(/&quot;/g,'"');
-        console.log(JSON.parse(stockString));
-        stockListings.init({
-            stocks: JSON.parse(stockString),
-            portfolios: JSON.parse(portfolioString)
-        });
-    });
-</script>
+<script src="{{ static_url('angular.min.js') }}"></script>
+<script src="{{ static_url('angular.min.js.map') }}"></script>
+<script src="{{ static_url('portfolio/controllers.js')}}"></script>
+<!--<script>-->
+    <!--$('#portfolioNav').addClass('active');-->
+    <!--$(document).ready(function() {-->
+        <!--var stockString = "{{jsonpickle.encode(stocks)}}".replace(/&quot;/g,'"');-->
+        <!--var portfolioString = "{{jsonpickle.encode(portfolios)}}".replace(/&quot;/g,'"');-->
+        <!--console.log(JSON.parse(stockString));-->
+        <!--stockListings.init({-->
+            <!--stocks: JSON.parse(stockString),-->
+            <!--portfolios: JSON.parse(portfolioString)-->
+        <!--});-->
+    <!--});-->
+<!--</script>-->
 {% end %}
