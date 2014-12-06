@@ -3,6 +3,7 @@ import tornado.escape as esc
 import logging
 import bcrypt
 import torndb
+from sql_queries import queries
 
 
 class RegisterHandler(BaseHandler):
@@ -17,12 +18,12 @@ class RegisterHandler(BaseHandler):
 
         if pwd == confirmPwd:
             db = self.db
-            query = "SELECT * FROM users WHERE email = %s"
+            query = queries.find_user_query
             user = db.get(query, email)
             if not user:
                 hashedPwd = bcrypt.hashpw(pwd, bcrypt.gensalt())
                 logging.info("Hashed password: " + hashedPwd)
-                query = "INSERT INTO users (email, pass) VALUES (%s, %s)"
+                query = queries.new_user_query
                 db.reconnect()
                 db.insert(query, email, hashedPwd)
                 self.redirect("/auth/login")
@@ -50,7 +51,7 @@ class LoginHandler(BaseHandler):
         email = self.get_argument("user_email")
         # this can only have a-z, 0-9, -,_, etc. Nothing that could mess up the query below.
         pwd = self.get_argument("password")
-        query = "SELECT * FROM users WHERE email = %s"
+        query = queries.find_user_query
         user = db.get(query, email)
         if user:
             # get hashed password from user
@@ -67,6 +68,7 @@ class LoginHandler(BaseHandler):
             # user does not exist
             error_msg = self.render_string('error.html', message="Login Credentials were incorrect")
             self.render("login.html", notification=error_msg, next=next_arg)
+
 
 class LogoutHandler(BaseHandler):
 
