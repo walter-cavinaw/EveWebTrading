@@ -1,23 +1,20 @@
 from BaseHandler import BaseHandler
+import logging
 import jsonpickle
 
 class PortfolioHandler(BaseHandler):
 
     def get(self):
+
+        db = self.db
+        userEmail = self.get_secure_cookie("user")
+
+        stockQuery = "SELECT * FROM users u, user_follows_stocks s WHERE u.email = %s AND u.id = s.userid"
+        stocks = db.query(stockQuery, userEmail)
+        logging.info(stocks)
+
         portfolios = [
 
         ]
-        stocks = [
-            {"ticker": "DIS"},
-            {"ticker": "TSLA"},
-            {"ticker": "WFM"},
-            {"ticker": "AAPL"},
-            {"ticker": "GOOG"},
-            {"ticker": "SCTY"},
-            {"ticker": "FB"},
-            {"ticker": "NFLX"},
-            {"ticker": "TWTR"},
-            {"ticker": "BAC"},
-            {"ticker": "COST"},
-        ]
+
         self.render("portfolio.html", jsonpickle=jsonpickle, stocks=stocks, portfolios=portfolios)
