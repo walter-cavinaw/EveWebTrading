@@ -17,12 +17,12 @@ class RegisterHandler(BaseHandler):
 
         if pwd == confirmPwd:
             db = self.db
-            query = "SELECT * FROM users WHERE id = %s"
+            query = "SELECT * FROM users WHERE email = %s"
             user = db.get(query, email)
             if not user:
                 hashedPwd = bcrypt.hashpw(pwd, bcrypt.gensalt())
                 logging.info("Hashed password: " + hashedPwd)
-                query = "INSERT INTO users (id, pass) VALUES (%s, %s)"
+                query = "INSERT INTO users (email, pass) VALUES (%s, %s)"
                 db.reconnect()
                 db.insert(query, email, hashedPwd)
                 self.redirect("/auth/login")
@@ -50,7 +50,7 @@ class LoginHandler(BaseHandler):
         email = self.get_argument("user_email")
         # this can only have a-z, 0-9, -,_, etc. Nothing that could mess up the query below.
         pwd = self.get_argument("password")
-        query = "SELECT * FROM users WHERE id = %s"
+        query = "SELECT * FROM users WHERE email = %s"
         user = db.get(query, email)
         if user:
             # get hashed password from user
