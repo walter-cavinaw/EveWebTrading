@@ -83,26 +83,10 @@
 {% end %}
 
 {% block scripts %}
-<!--force update-->
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script src="http://techanjs.org/techan.min.js"></script>
-<script src="{{ static_url('portfolio/stockListings.js') }}"></script>
-<script src="{{ static_url('portfolio/utils.js') }}"></script>
-<script src="{{ static_url('jquery-ui.min.js') }}"></script>
-<script src="{{ static_url('underscore.js') }}"></script>
-<script src="{{ static_url('angular.min.js') }}"></script>
-<script src="{{ static_url('angular.min.js.map') }}"></script>
 <script src="{{ static_url('portfolio/controllers.js')}}"></script>
-<!--<script>-->
-    <!--$('#portfolioNav').addClass('active');-->
-    <!--$(document).ready(function() {-->
-        <!--var stockString = "{{jsonpickle.encode(stocks)}}".replace(/&quot;/g,'"');-->
-        <!--var portfolioString = "{{jsonpickle.encode(portfolios)}}".replace(/&quot;/g,'"');-->
-        <!--console.log(JSON.parse(stockString));-->
-        <!--stockListings.init({-->
-            <!--stocks: JSON.parse(stockString),-->
-            <!--portfolios: JSON.parse(portfolioString)-->
-        <!--});-->
-    <!--});-->
-<!--</script>-->
+<script>
+        $('#portfolioNav').addClass('active');
+</script>
 {% end %}
