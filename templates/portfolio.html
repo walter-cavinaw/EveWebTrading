@@ -42,14 +42,14 @@
 			</div> <!-- portfolioList -->
 
 			<div id="stocksList" ng-controller="ListController" ng-init="init({{jsonpickle.encode(stocks)}})">
-					<div class="row stock-row" ng-repeat="stock in stocks" id={{!stock.ticker}}>
+					<div class="row stock-row" ng-controller="StockController" ng-init="stock=stock" ng-repeat="stock in stocks" id={{!stock.ticker}}>
 						<div class="heading">
                             <div ng-model="collapsed" href="#" ng-click="collapsed=!collapsed" class="ng-pristine ng-valid" ng-class="{testheader : collapsed}">
                                 <a href={{!"/stock/"+stock.ticker}}><strong ng-bind="stock.ticker"></strong></a>
                             </div>
                         </div>
                         <div id={{!stock.ticker+"panel"}} ng-show="collapsed">
-						 <stock-chart ticker='{{!stock.ticker}}' class="col-lg-7 chart" id={{!stock.ticker+"chart"}}></stock-chart>
+						 <stock-chart ticker='{{!stock.ticker}}' data='stock.data' class="col-lg-7 chart" id={{!stock.ticker+"chart"}}></stock-chart>
 						<div class="col-lg-4 news" style="padding-left: 20px">
 							<p><strong ng-bind="stock.ticker">News</strong></p>
 							<ul id="newsList"></ul>
