@@ -11,12 +11,12 @@ class PortfolioHandler(BaseHandler):
         portfolios = []
         stocks_query = queries.folio_stocks_query
         db = self.db
+        db.reconnect()
         userEmail = self.get_secure_cookie("user")
 
         if userEmail:
             stocks = db.query(stocks_query, userEmail, 'default')
             logging.info(stocks)
-
         else:
             stocks = db.query(stocks_query, 'dev@test.com', 'default')
 
