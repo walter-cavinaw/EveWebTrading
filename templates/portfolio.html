@@ -39,7 +39,7 @@
 				{% end %}
 			</div> <!-- portfolioList -->
 
-			<div id="stocksList" ng-controller="ListController" ng-init="init({{jsonpickle.encode(stocks)}})">
+			<div id="stocksList" ng-controller="ListController" ng-init="init({{stocks}})">
 					<div class="row stock-row" ng-controller="StockController" ng-init="stock=stock" ng-repeat="stock in stocks" id={{!stock.ticker}}>
 						<div class="heading">
                             <div ng-model="collapsed" href="#" ng-click="collapsed=!collapsed" class="ng-pristine ng-valid" ng-class="{testheader : collapsed}">
