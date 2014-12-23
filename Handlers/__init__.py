@@ -7,3 +7,4 @@ from PortfolioHandler import PortfolioHandler
 from UserSocketHandler import UserSocketHandler
 from StockHandler import StockHandler
 from SearchHandler import SearchHandler
+from SearchAPIHandler import SearchAPIHandler

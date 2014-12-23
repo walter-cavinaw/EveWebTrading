@@ -1,4 +1,4 @@
-var portfolio = angular.module("portfolio", []);
+var portfolio = angular.module("portfolio", ['ui.bootstrap']);
 
 portfolio.controller("StockController", function($scope, $http){
 
@@ -9,7 +9,7 @@ portfolio.controller("StockController", function($scope, $http){
         var previousDate = new Date(previousDate.setMonth(currentDate.getMonth() - 3));
         var previousDateString = previousDate.getFullYear() + "-" + ("0" + (previousDate.getMonth() + 1)).slice(-2) + "-" + ("0" + previousDate.getDate()).slice(-2);
 
-        var main = "http://www.quandl.com/api/v1/datasets/WIKI/" + $scope.stock.ticker + ".json";
+        var main = "http://www.quandl.com/api/v1/datasets/" + $scope.stock.dataset + ".json";
         var params = "?&trim_start=" + previousDateString + "&trim_end=" + currentDateString;
         var auth = "&auth_token=sok7xuv8xDR_9LooZmaZ";
         var url = main + params + auth;
@@ -46,10 +46,29 @@ portfolio.controller("StockController", function($scope, $http){
     $scope.init_data();
 });
 
-portfolio.controller('ListController', function($scope){
-   $scope.init = function(stocks){
+portfolio.controller('ListController', function($scope, $http){
+    $scope.selected = undefined;
+    $scope.init = function(stocks) {
        $scope.stocks = stocks;
-   }
+   };
+
+   $scope.add_stock = function(stock, $http){
+       $scope.stocks.push(stock);
+       $http.post('/add')
+   };
+
+   $scope.getLocation = function(val) {
+    console.log('in get Location');
+    return $http.get('http://localhost:8888/search_api', {
+      params: {
+        matching: val
+      }
+    }).then(function(response){
+      return response.data.map(function(item){
+        return item.name;
+      });
+    });
+  };
 });
 
 portfolio.directive('stockChart', function(){

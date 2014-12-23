@@ -2,6 +2,7 @@ from BaseHandler import BaseHandler
 import logging
 import json
 from sql_queries import queries
+from helpers import date_handler
 
 class PortfolioHandler(BaseHandler):
 
@@ -19,9 +20,5 @@ class PortfolioHandler(BaseHandler):
             logging.info(stocks)
         else:
             db_stocks = db.query(stocks_query, 'dev@test.com', 'default')
-        stocks = json.dumps(db_stocks, default=self.date_handler)
+        stocks = json.dumps(db_stocks, default=date_handler)
         self.render("portfolio.html", stocks=stocks, portfolios=portfolios)
-
-    @staticmethod
-    def date_handler(obj):
-        return obj.isoformat() if hasattr(obj, 'isoformat') else obj
