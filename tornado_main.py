@@ -12,6 +12,7 @@ import tornado.websocket
 from tornado.options import options
 import torndb
 from settings import settings
+from sql_queries import queries
 
 from CDASimulator.VirtualExchange import VirtualExchange
 from CDASimulator.ExchangeObjects.Company import Company
@@ -44,6 +45,12 @@ class Application(tornado.web.Application):
             (r'.*', HomeHandler),
         ]
         tornado.web.Application.__init__(self, handlers, **settings)
+
+        # initialize stocks for SearchAPI
+        db = self.db
+        db.reconnect()
+        query = queries.all_stocks
+        SearchAPIHandler.stocks = db.query(query)
 
 
 def main():
