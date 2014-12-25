@@ -4,13 +4,13 @@
     vertical-align: middle;
 }
 
-.heading div:after {
+div.heading:after {
     font-family:'Glyphicons Halflings';
     content:"\e080";
     float: left;
     color: #595959;
 }
-.heading div.testheader:after {
+div.heading.openheader:after {
     font-family:'Glyphicons Halflings';
     content:"\e114";
     float: left;
@@ -21,6 +21,14 @@
     margin-left: 10px;
 }
 
-.heading div:hover:after {
+div.heading:hover:after {
     color:#428bca;
+}
+
+div.close:hover{
+    color:#428bca;
+}
+
+span.close{
+    float: right;
 }

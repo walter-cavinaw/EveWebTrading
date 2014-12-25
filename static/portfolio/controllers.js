@@ -57,7 +57,7 @@ portfolio.controller('ListController', function($scope, $http){
        $http.post('/add')
    };
 
-   $scope.getLocation = function(val) {
+   $scope.getSecurities = function(val) {
     console.log('in get Location');
     return $http.get('http://localhost:8888/search_api', {
       params: {

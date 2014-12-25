@@ -40,15 +40,22 @@
 			</div> <!-- portfolioList -->
 
 			<div id="stocksList" ng-controller="ListController" ng-init="init({{stocks}})">
-                 <div class="container-fluid">
-                    <pre>Model: {{! asyncSelected | json}}</pre>
-                    <input type="text" ng-model="asyncSelected" placeholder="Locations loaded via $http" typeahead="address for address in getLocation($viewValue)" typeahead-wait-ms="1000" typeahead-loading="loadingLocations" class="form-control">
-                    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-                 </div>
+                <div class="row">
+                     <div class="col-lg-4" style="margin-bottom: 10px; margin-top: 10px;">
+                        <input type="text" ng-model="asyncSelected" placeholder="Search for stock" typeahead="sec for sec in getSecurities($viewValue)" typeahead-wait-ms="1000" typeahead-loading="loadingSecurities" class="form-control">
+                        <i ng-show="loadingSecurities" class="glyphicon glyphicon-refresh"></i>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-primary">Add to portfolio</button>
+                    </div>
+                </div>
 					<div class="row stock-row" ng-controller="StockController" ng-init="stock=stock" ng-repeat="stock in stocks" id={{!stock.ticker}}>
-						<div class="heading">
-                            <div ng-model="collapsed" href="#" ng-click="collapsed=!collapsed" class="ng-pristine ng-valid" ng-class="{testheader : collapsed}">
+						<div>
+                            <div ng-model="collapsed" href="#" ng-click="collapsed=!collapsed" class="col-lg-11 heading ng-pristine ng-valid" ng-class="{openheader : collapsed}">
                                 <a href={{!"/stock/"+stock.ticker}}><strong ng-bind="stock.ticker"></strong></a>
+                            </div>
+                            <div class="col-lg-1">
+                                <span class="close glyphicon glyphicon-remove"></span>
                             </div>
                         </div>
                         <div id={{!stock.ticker+"panel"}} ng-show="collapsed">

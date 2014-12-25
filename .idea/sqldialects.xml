@@ -2,6 +2,7 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/dbsql/eve_schema.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/dbsql/test_values.sql" dialect="MySQL" />
   </component>
 </project>
 

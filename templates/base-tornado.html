@@ -8,14 +8,14 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    {% block headers %}{% end %}
-
     <!-- Bootstrap core CSS -->
+    <!--<link href="//ajax.googleapis.com/ajax/libs/angular_material/0.6.1/angular-material.min.css" rel="stylesheet">-->
     <link href="{{ static_url('bootstrap/bootstrap.css') }}" rel="stylesheet">
-    <link href="//ajax.googleapis.com/ajax/libs/angular_material/0.6.1/angular-material.min.css" rel="stylesheet">
     <link href="{{ static_url('material/css/material.min.css') }}" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="{{ static_url('sticky-footer-navbar.css') }}" rel="stylesheet">
+
+    {% block headers %}{% end %}
 
 </head>
 
