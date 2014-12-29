@@ -58,14 +58,13 @@ portfolio.controller('ListController', function($scope, $http){
    };
 
    $scope.getSecurities = function(val) {
-    console.log('in get Location');
     return $http.get('http://localhost:8888/search_api', {
       params: {
         matching: val
       }
     }).then(function(response){
       return response.data.map(function(item){
-        return item.name;
+        return item;
       });
     });
   };
