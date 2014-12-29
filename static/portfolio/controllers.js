@@ -52,13 +52,22 @@ portfolio.controller('ListController', function($scope, $http){
        $scope.stocks = stocks;
    };
 
-   $scope.add_stock = function(stock, $http){
-       $scope.stocks.push(stock);
-       $http.post('/add')
+   $scope.add_stock = function(stock){
+       $http.post('/portfolio', {
+                stock: stock.dataset
+       }).
+       success(function(data, status, headers, config){
+               console.log('success');
+               console.log(status);
+               $scope.stocks.push(stock);
+           }).
+       error(function(data, status, headers, config){
+               console.log("could not be added");
+       })
    };
 
    $scope.getSecurities = function(val) {
-    return $http.get('http://localhost:8888/search_api', {
+    return $http.get('/search_api', {
       params: {
         matching: val
       }
