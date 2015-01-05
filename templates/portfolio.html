@@ -13,79 +13,66 @@
 
     <div class="row" style="height: 50px"></div>
 
-			<!-- If the user is not logged in, show generic home page -->
-			<div id="portfolioList">
-				{% for portfolio in portfolios %}
-					<div class="row portfolio-row" id="{{portfolio}}">
-						<div class="col-lg-2 summary">
-							<strong style="font-size: 200%"><a>{{portfolio.name}}</a></strong>
-							<strong style="font-size: 200%">(Portfolio)</strong>
-							<br>
-						</div>
-						<div class="col-lg-5" style="padding: 0">
-							<!-- <canvas class="chart" width="300px" height="120px"></canvas> -->
-						</div>
-						<div class="col-lg-4 news" style="padding-left: 20px">
-							<p><strong>Something</strong></p>
-						</div>
-						<div class="col-lg-1 options">
-							<p><a>Edit</a></p>
-							<p class="delete"><a>Delete</a></p>
-						</div>
-						<div class="col-lg-12">
-							<hr>
-						</div>
-					</div>
-				{% end %}
-			</div> <!-- portfolioList -->
+        <!-- If the user is not logged in, show generic home page -->
+        <div id="portfolioList">
+            {% for portfolio in portfolios %}
+                <a href="{{portfolio.folioid}}">
+                    <button type="button" class="btn btn-primary btn-lg">
+                    {{portfolio.folioid}}
+                    </button>
+                </a>
+            {% end %}
+        </div> <!-- portfolioList -->
 
-			<div id="stocksList" ng-controller="ListController" ng-init="init({{stocks}})">
-                <div class="row">
-                     <div class="col-lg-4" style="margin-bottom: 10px; margin-top: 10px;">
-                        <input type="text" ng-model="asyncSelected" placeholder="Search for stock" typeahead="sec as (sec.name+' ('+sec.ticker+')') for sec in getSecurities($viewValue)" typeahead-wait-ms="1000" typeahead-loading="loadingSecurities" class="form-control">
-                        <i ng-show="loadingSecurities" class="glyphicon glyphicon-refresh"></i>
-                    </div>
+        <hr>
+
+        <div id="stocksList" ng-controller="ListController" ng-init="init({{stocks}})">
+            <div class="row">
+                 <div class="col-lg-4" style="margin-bottom: 10px; margin-top: 10px;">
+                    <input type="text" ng-model="asyncSelected" placeholder="Search for stock" typeahead="sec as (sec.name+' ('+sec.ticker+')') for sec in getSecurities($viewValue)" typeahead-wait-ms="1000" typeahead-loading="loadingSecurities" class="form-control">
+                    <i ng-show="loadingSecurities" class="glyphicon glyphicon-refresh"></i>
+                </div>
+                <div>
+                    <button type="submit" ng-click="add_stock(asyncSelected)" class="btn btn-primary">Add to portfolio</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4" style="margin-bottom: 10px;">
+                    Stock name: {{!asyncSelected.name}}, Stock ticker: {{!asyncSelected.ticker}}
+                </div>
+            </div>
+                <div class="row stock-row" ng-controller="StockController" ng-init="stock=stock" ng-repeat="stock in stocks" id={{!stock.ticker}}>
                     <div>
-                        <button type="submit" ng-click="add_stock(asyncSelected)" class="btn btn-primary">Add to portfolio</button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4" style="margin-bottom: 10px;">
-                        Stock name: {{!asyncSelected.name}}, Stock ticker: {{!asyncSelected.ticker}}
-                    </div>
-                </div>
-					<div class="row stock-row" ng-controller="StockController" ng-init="stock=stock" ng-repeat="stock in stocks" id={{!stock.ticker}}>
-						<div>
-                            <div ng-model="collapsed" href="#" ng-click="collapsed=!collapsed" class="col-lg-11 heading ng-pristine ng-valid" ng-class="{openheader : collapsed}">
-                                <a href={{!"/stock/"+stock.ticker}}><strong ng-bind="stock.name + ' ('+stock.ticker+')'"></strong></a>
-                            </div>
-                            <div class="col-lg-1">
-                                <span class="close glyphicon glyphicon-remove"></span>
-                            </div>
+                        <div ng-model="collapsed" href="#" ng-click="collapsed=!collapsed" class="col-lg-11 heading ng-pristine ng-valid" ng-class="{openheader : collapsed}">
+                            <a href={{!"/stock/"+stock.ticker}}><strong ng-bind="stock.name + ' ('+stock.ticker+')'"></strong></a>
                         </div>
-                        <div id={{!stock.ticker+"panel"}} ng-show="collapsed">
-						 <stock-chart ticker='{{!stock.ticker}}' data='stock.data' class="col-lg-7 chart" id={{!stock.ticker+"chart"}}></stock-chart>
-						<div class="col-lg-4 news" style="padding-left: 20px">
-							<p><strong ng-bind="stock.ticker">News</strong></p>
-							<ul id="newsList"></ul>
-							<div class="col-lg-2">
-								<div id="newsNext" style="cursor: pointer">Prev</div>
-							</div>
-							<div class="col-lg-2">
-								<div id="newsPrev" style="cursor: pointer">Next</div>
-							</div>
-						</div>
-						<div class="col-lg-1 options">
-							<p><a>Edit</a></p>
-							<p class="delete"><a>Delete</a></p>
-						</div>
-                     </div>
-                     <div class="col-lg-12">
-                        <hr style="margin-bottom: 10px; margin-top: 10px; border-top: 1px solid #9a9a9a">
+                        <div class="col-lg-1">
+                            <span class="close glyphicon glyphicon-remove"></span>
+                        </div>
                     </div>
-					</div>
-			</div>	<!-- stocksList -->
-            <div style="height:50px"></div>
+                    <div id={{!stock.ticker+"panel"}} ng-show="collapsed">
+                     <stock-chart ticker='{{!stock.ticker}}' data='stock.data' class="col-lg-7 chart" id={{!stock.ticker+"chart"}}></stock-chart>
+                    <div class="col-lg-4 news" style="padding-left: 20px">
+                        <p><strong ng-bind="stock.ticker">News</strong></p>
+                        <ul id="newsList"></ul>
+                        <div class="col-lg-2">
+                            <div id="newsNext" style="cursor: pointer">Prev</div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div id="newsPrev" style="cursor: pointer">Next</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1 options">
+                        <p><a>Edit</a></p>
+                        <p class="delete"><a>Delete</a></p>
+                    </div>
+                 </div>
+                 <div class="col-lg-12">
+                    <hr style="margin-bottom: 10px; margin-top: 10px; border-top: 1px solid #9a9a9a">
+                </div>
+                </div>
+        </div>	<!-- stocksList -->
+        <div style="height:50px"></div>
 
 </div>
 

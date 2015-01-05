@@ -28,8 +28,9 @@ class Application(tornado.web.Application):
             user=options.mysql_user, password=options.mysql_password)
         handlers = [
             (r"/", HomeHandler),
-            # Homepage is routed here
-            (r"/portfolio", PortfolioHandler),
+            # The portfolio name may be passed into the url
+            (r"/portfolio/(.*)", PortfolioHandler),
+
             (r"/trade", MainHandler),
             # Requests to get/post order data are routed here
             (r"/usersocket", UserSocketHandler),
